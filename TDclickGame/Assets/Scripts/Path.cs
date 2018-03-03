@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Path : MonoBehaviour {
 
+    public GameObject nextPath;
+
 	// Use this for initialization
 	void Start () {
 		

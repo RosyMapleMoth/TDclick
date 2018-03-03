@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class End : MonoBehaviour {
+public class PathStart : MonoBehaviour {
+
+    public GameObject nextNode;
 
 	// Use this for initialization
 	void Start () {
