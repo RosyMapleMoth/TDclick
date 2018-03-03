@@ -28,6 +28,22 @@ sysinfo.txt
 *.pidb
 .DS_Store
 
+# vs
+[Ee]xported[Oo]bj/
+.vs/
+/*.userprefs
+/*.csproj
+/*.pidb
+*.pidb.meta
+/*.suo
+/*.sln*
+/*.user
+/*.unityproj
+/*.booproj
+.consulo/
+/*.tmp
+/*.svd
+
 ###
 # OS generated
 ###
