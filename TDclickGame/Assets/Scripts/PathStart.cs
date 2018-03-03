@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class PathStart : MonoBehaviour {
 
-    public GameObject nextNode;
+    public GameObject nextPath;
+    public GameObject Enemy;
+    private float counter;
 
 	// Use this for initialization
 	void Start () {
@@ -13,6 +15,17 @@ public class PathStart : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        counter += Time.deltaTime;
+
+        if (counter > 1)
+        {
+            counter -= 1;
+            SpawnEnemy();
+        }
 	}
+
+    private void SpawnEnemy()
+    {
+        Instantiate(Enemy, this.transform.position, Quaternion.identity);
+    }
 }
