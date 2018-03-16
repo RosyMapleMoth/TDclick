@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class wallet: MonoBehaviour {
+public class money : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

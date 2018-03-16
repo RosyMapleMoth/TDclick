@@ -7,6 +7,8 @@ TagManager:
   - Start
   - Road
   - End
+  - Enemy
+  - GameState
   layers:
   - Default
   - TransparentFX
