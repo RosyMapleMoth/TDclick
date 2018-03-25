@@ -8,7 +8,7 @@ public class ArrowTower : Tower {
 	void Update () {
 
         AddTimer();
-     
+
         if (GetTimer() > 2)
         {
             GameObject leader = null;
@@ -29,22 +29,16 @@ public class ArrowTower : Tower {
                 leader.GetComponentInParent<MonsterAI>().ChangeHealth(-2);
             }
         }
+    }
 
-        if (Input.GetMouseButtonUp(1))
+    private void ClickedOn ()
+    {
+        Debug.Log("Clicked on Arrow");
+        if (gameState.objectClicked == this.gameObject && gameState.GetGold() >= damage * damage)
         {
-            Ray ray = new Ray(Input.mousePosition, Vector3.down);
-            RaycastHit hitObject;
-            if (Physics.Raycast(ray, out hitObject))
-            {
-                if (hitObject.transform == transform.parent.transform)
-                {
-                    if (gameState.GetGold() > damage)
-                    {
-                        damage += 1;
-                        gameState.ChangeGold(-damage);
-                    }
-                }
-            }
+            gameState.ChangeGold(-1 * damage * damage);
+            damage = damage + 1;
+            Debug.Log("Upgraded Arrow");
         }
     }
 }

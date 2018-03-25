@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Tower : MonoBehaviour {
 
@@ -15,6 +17,7 @@ public class Tower : MonoBehaviour {
         timer = 0;
         GameState gameState = GameObject.FindGameObjectWithTag("GameState").GetComponent<GameState>();
         damage = 1;
+        gameState.validClick.AddListener(ClickedOn);
 	}
 	
 	// Update is called once per frame
@@ -32,22 +35,6 @@ public class Tower : MonoBehaviour {
             }
         }
 
-        if (Input.GetMouseButtonUp(1))
-        {
-            Ray ray = new Ray(Input.mousePosition, Vector3.down);
-            RaycastHit hitObject;
-            if (Physics.Raycast(ray, out hitObject))
-            {
-                if (hitObject.transform == transform.parent.transform)
-                {
-                    if (gameState.GetGold() > damage)
-                    {
-                        damage += 1;
-                        gameState.ChangeGold(-damage);
-                    }
-                }
-            }
-        }
 	}
 
     private void OnTriggerEnter(Collider other)
@@ -55,8 +42,8 @@ public class Tower : MonoBehaviour {
         if (other.gameObject.CompareTag("Enemy"))
         {
             enemiesInRange.Add(other.gameObject);
-            Debug.Log("thing added");
-           // other.GetComponent<MonsterAI>().Death.AddListener(EnemyDeath(other.gameObject));
+            Debug.Log("thing added" + other.ToString());
+            other.gameObject.GetComponentInParent<MonsterAI>().Death.AddListener(EnemyDeath);
         }
     }
 
@@ -65,9 +52,9 @@ public class Tower : MonoBehaviour {
         enemiesInRange.Remove(other.gameObject);
     }
 
-    public void EnemyDeath(GameObject enemy)
+    private void EnemyDeath (GameObject enemy)
     {
-
+        enemiesInRange.Remove(enemy);
     }
 
     public float GetTimer()
@@ -88,5 +75,16 @@ public class Tower : MonoBehaviour {
     public List<GameObject> GetEnemies()
     {
         return enemiesInRange;
+    }
+
+    private void ClickedOn ()
+    {
+        Debug.Log("Clicked on Bonfire");
+        if (gameState.objectClicked == this.gameObject && gameState.GetGold() >= damage * damage * 10)
+        {
+            gameState.ChangeGold(-1 * damage * damage * 10);
+            damage = damage + 1;
+            Debug.Log("Uppgraded Bonfire");
+        }
     }
 }

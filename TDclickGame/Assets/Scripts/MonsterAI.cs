@@ -11,11 +11,13 @@ public class MonsterAI : MonoBehaviour {
     public GameObject startPath;
     public Material damageMat;
     public Material normalMat;
-    public UnityEvent Death;
+    public class GameObjectEvent : UnityEvent<GameObject> { }
+    public GameObjectEvent Death;
     public float distance;
     private GameState gameState;
 
     private float damageTimer;
+    private bool alive;
 
 	// Use this for initialization
 	void Start () {
@@ -29,6 +31,8 @@ public class MonsterAI : MonoBehaviour {
         damageTimer = .2f;
         distance = 0;
         gameState = GameObject.FindGameObjectWithTag("GameState").GetComponent<GameState>();
+        alive = true;
+        Death = new GameObjectEvent();
 	}
 
     // Update is called once per frame
@@ -50,6 +54,7 @@ public class MonsterAI : MonoBehaviour {
                 catch
                 {
                     Debug.Log("We hit the end of the path!");
+                    gameState.LoseLife();
                     GameObject.Destroy(this.gameObject);
                 }
             }
@@ -64,6 +69,12 @@ public class MonsterAI : MonoBehaviour {
         if (damageTimer < .2f)
         {
             damageTimer += Time.deltaTime;
+
+            if (alive && Health < 1)
+            {
+                Death.Invoke(this.gameObject);
+            }
+
             if (damageTimer > .2f)
             {
                 gameObject.GetComponentInChildren<MeshRenderer>().material = normalMat;
@@ -71,10 +82,11 @@ public class MonsterAI : MonoBehaviour {
                 if (Health < 1)
                 {
                     gameState.ChangeGold(1);
-                    Death.Invoke();
+                    gameState.IncreaseScore(1);
                     GameObject.Destroy(this.gameObject);
                 }
             }
+            
         }      
     }
 
