@@ -15,7 +15,7 @@ public class Tower : MonoBehaviour {
 	void Start () {
         enemiesInRange = new List<GameObject>();
         timer = 0;
-        GameState gameState = GameObject.FindGameObjectWithTag("GameState").GetComponent<GameState>();
+        gameState = GameObject.FindGameObjectWithTag("GameState").GetComponent<GameState>();
         damage = 1;
         gameState.validClick.AddListener(ClickedOn);
 	}
@@ -80,7 +80,7 @@ public class Tower : MonoBehaviour {
     private void ClickedOn ()
     {
         Debug.Log("Clicked on Bonfire");
-        if (gameState.objectClicked == this.gameObject && gameState.GetGold() >= damage * damage * 10)
+        if (gameState.objectClicked != null && gameState.objectClicked == this.gameObject && gameState.GetGold() >= damage * damage * 10)
         {
             gameState.ChangeGold(-1 * damage * damage * 10);
             damage = damage + 1;
