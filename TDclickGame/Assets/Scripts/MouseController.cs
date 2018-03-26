@@ -19,7 +19,7 @@ public class MouseController : MonoBehaviour {
         {
             Debug.Log("Mouse Clicked");
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            
+            Debug.DrawRay(ray.origin, ray.direction, Color.black,  2f);
             RaycastHit hitObject;
             if (Physics.Raycast(ray, out hitObject))
             {
