@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -2075,6 +2075,10 @@ Prefab:
       propertyPath: m_LocalScale.y
       value: 0.6
       objectReference: {fileID: 0}
+    - target: {fileID: 1638397517409092, guid: 1c29fb17dd7ed1e4e8d3094d7e94874e, type: 2}
+      propertyPath: m_Name
+      value: Bonfire Range
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1c29fb17dd7ed1e4e8d3094d7e94874e, type: 2}
   m_IsPrefabParent: 0
@@ -2187,6 +2191,10 @@ Prefab:
     - target: {fileID: 4930198270396328, guid: 1f2d5c503a4a10f44a23930c1c98b26e, type: 2}
       propertyPath: m_LocalPosition.y
       value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1025177983902458, guid: 1f2d5c503a4a10f44a23930c1c98b26e, type: 2}
+      propertyPath: m_Name
+      value: Arrow Range
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114857168795006608, guid: 1f2d5c503a4a10f44a23930c1c98b26e, type: 2}
@@ -2427,6 +2435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22394ed6cddfd6d45b0c791b011fe691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 0
 --- !u!1001 &1816608471
 Prefab:
   m_ObjectHideFlags: 0
