@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Tower : MonoBehaviour
+abstract public class Tower : MonoBehaviour
 {
 
 	private List<GameObject> enemiesInRange;
@@ -28,11 +28,7 @@ public class Tower : MonoBehaviour
 		timer += Time.deltaTime;
 		if (timer > 1) {
 			timer = 0;
-			foreach (var enemy in enemiesInRange) {
-				if (enemy != null) {
-					enemy.GetComponentInParent<MonsterAI> ().ChangeHealth (-damage);
-				}
-			}
+			DealDamage ();
 		}
 
 	}
@@ -75,13 +71,14 @@ public class Tower : MonoBehaviour
 		return enemiesInRange;
 	}
 
-	private void ClickedOn ()
+	public void ClickedOn ()
 	{
-		Debug.Log ("Clicked on Bonfire");
-		if (gameState.objectClicked != null && gameState.objectClicked == gameObject && gameState.GetGold () >= damage * damage * 10) {
-			gameState.ChangeGold (-1 * damage * damage * 10);
-			damage = damage + 1;
-			Debug.Log ("Uppgraded Bonfire");
+		if (gameState.objectClicked != null && gameState.objectClicked == this.gameObject) {
+			Upgrade ();
 		}
 	}
+
+	protected abstract void Upgrade ();
+
+	protected abstract void DealDamage ();
 }
