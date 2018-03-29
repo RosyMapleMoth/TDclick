@@ -6,12 +6,12 @@ using UnityEngine.Events;
 
 abstract public class Tower : MonoBehaviour
 {
-
 	private List<GameObject> enemiesInRange;
 	private float timer;
 	protected GameState gameState;
 	public int damage;
 	private float fireRate;
+    public GameObject RangeObject;
 
 	// Use this for initialization
 	void Start ()
@@ -22,6 +22,18 @@ abstract public class Tower : MonoBehaviour
 		damage = 1;
 		gameState.validClick.AddListener (ClickedOn);
 		fireRate = InitRate ();
+
+        GameObject rangeObject = Instantiate(RangeObject);
+        rangeObject.transform.parent = this.transform;
+        rangeObject.transform.SetPositionAndRotation(new Vector3(0, -.1f, 0) + gameObject.transform.position, Quaternion.identity);
+
+        TowerRange towerRange = rangeObject.GetComponent<TowerRange>();
+        towerRange.monsterEntered = new TowerRange.GameObjectEvent();
+        towerRange.monsterExited = new TowerRange.GameObjectEvent();
+
+        towerRange.monsterEntered.AddListener(DetectedEnemy);
+        towerRange.monsterExited.AddListener(EnemyLeft);
+        SetRange(rangeObject);
 	}
 	
 	// Update is called once per frame
@@ -35,17 +47,17 @@ abstract public class Tower : MonoBehaviour
 
 	}
 
-	private void OnTriggerEnter (Collider other)
+	private void DetectedEnemy (GameObject other)
 	{
-		if (other.gameObject.CompareTag ("Enemy")) {
-			enemiesInRange.Add (other.gameObject);
-			other.gameObject.GetComponentInParent<MonsterAI> ().Death.AddListener (EnemyDeath);
+		if (other.CompareTag ("Enemy")) {
+			enemiesInRange.Add (other);
+			other.GetComponentInParent<MonsterAI> ().Death.AddListener (EnemyDeath);
 		}
 	}
 
-	private void OnTriggerExit (Collider other)
+	private void EnemyLeft (GameObject other)
 	{
-		enemiesInRange.Remove (other.gameObject);
+		enemiesInRange.Remove (other);
 	}
 
 	private void EnemyDeath (GameObject enemy)
@@ -85,4 +97,6 @@ abstract public class Tower : MonoBehaviour
 	protected abstract void DealDamage ();
 
 	protected abstract float InitRate ();
+
+    protected abstract void SetRange(GameObject rangeObject);
 }

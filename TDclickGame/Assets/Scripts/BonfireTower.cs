@@ -31,4 +31,9 @@ public class BonfireTower : Tower
 	{
 		return 1f;
 	}
+
+    protected override void SetRange(GameObject rangeObject)
+    {
+        rangeObject.transform.localScale.Set(3, 1, 3);
+    }
 }

@@ -24,7 +24,7 @@ public class MouseController : MonoBehaviour
 			RaycastHit hitObject;
 			if (Physics.Raycast (ray, out hitObject)) {
 				Debug.Log ("Object Found = " + hitObject.collider.gameObject.ToString ());
-				gameState.objectClicked = hitObject.collider.gameObject.transform.GetChild (0).gameObject;
+				gameState.objectClicked = hitObject.collider.gameObject.gameObject;
 				gameState.validClick.Invoke ();
 			}
 		} else {

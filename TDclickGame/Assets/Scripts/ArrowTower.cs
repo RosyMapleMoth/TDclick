@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ArrowTower : Tower
 {
-	
+
 	protected override void DealDamage ()
 	{
 		float leaderDistance = 0;
@@ -39,4 +39,9 @@ public class ArrowTower : Tower
 	{
 		return 2f;
 	}
+
+    protected override void SetRange(GameObject rangeObject)
+    {
+        rangeObject.transform.localScale.Set(6, 1, 6);
+    }
 }
