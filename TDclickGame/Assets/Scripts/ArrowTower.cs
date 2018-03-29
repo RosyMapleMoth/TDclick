@@ -4,8 +4,19 @@ using UnityEngine;
 
 public class ArrowTower : Tower
 {
+    private float range;
+    private float rate;
+    private int damage;
 
-	protected override void DealDamage ()
+
+    protected override void Initialize()
+    {
+        range = 2;
+        rate = 2;
+        damage = 1;
+    }
+
+    protected override void DealDamage ()
 	{
 		float leaderDistance = 0;
 		GameObject leader = null;
@@ -18,7 +29,7 @@ public class ArrowTower : Tower
 		}
 
 		if (leader != null) {
-			leader.GetComponentInParent<MonsterAI> ().ChangeHealth (-2);
+			leader.GetComponentInParent<MonsterAI> ().ChangeHealth (-1 * damage);
 		}
 	}
 
@@ -35,13 +46,13 @@ public class ArrowTower : Tower
 		}
 	}
 
-	protected override float InitRate ()
+	protected override float GetRate ()
 	{
-		return 2f;
+		return rate;
 	}
 
-    protected override void SetRange(GameObject rangeObject)
+    protected override float GetRange()
     {
-        rangeObject.transform.localScale.Set(6, 1, 6);
+        return range;
     }
 }

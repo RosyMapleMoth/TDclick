@@ -9,32 +9,33 @@ abstract public class Tower : MonoBehaviour
 	private List<GameObject> enemiesInRange;
 	private float timer;
 	protected GameState gameState;
-	public int damage;
 	private float fireRate;
     public GameObject RangeObject;
 
 	// Use this for initialization
 	void Start ()
 	{
+        Initialize();
 		enemiesInRange = new List<GameObject> ();
 		timer = 0;
 		gameState = GameObject.FindGameObjectWithTag ("GameState").GetComponent<GameState> ();
-		damage = 1;
+
 		gameState.validClick.AddListener (ClickedOn);
-		fireRate = InitRate ();
+		fireRate = GetRate ();
 
-        GameObject rangeObject = Instantiate(RangeObject);
-        rangeObject.transform.parent = this.transform;
-        rangeObject.transform.SetPositionAndRotation(new Vector3(0, -.1f, 0) + gameObject.transform.position, Quaternion.identity);
+        RangeObject = Instantiate(this.RangeObject);
+        RangeObject.transform.parent = this.transform;
+        RangeObject.transform.SetPositionAndRotation(new Vector3(0, -.1f, 0) + gameObject.transform.position, Quaternion.identity);
 
-        TowerRange towerRange = rangeObject.GetComponent<TowerRange>();
+        TowerRange towerRange = RangeObject.GetComponent<TowerRange>();
         towerRange.monsterEntered = new TowerRange.GameObjectEvent();
         towerRange.monsterExited = new TowerRange.GameObjectEvent();
 
         towerRange.monsterEntered.AddListener(DetectedEnemy);
         towerRange.monsterExited.AddListener(EnemyLeft);
-        SetRange(rangeObject);
-	}
+
+        SetRange();
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -92,11 +93,20 @@ abstract public class Tower : MonoBehaviour
 		}
 	}
 
+    private void SetRange ()
+    {
+        float range = GetRange();
+        float towerRangeValue = range * 4 + 2;
+        RangeObject.transform.localScale = new Vector3(towerRangeValue, 1, towerRangeValue);
+    }
+
 	protected abstract void Upgrade ();
 
 	protected abstract void DealDamage ();
 
-	protected abstract float InitRate ();
+	protected abstract float GetRate ();
 
-    protected abstract void SetRange(GameObject rangeObject);
+    protected abstract float GetRange();
+
+    protected abstract void Initialize();
 }

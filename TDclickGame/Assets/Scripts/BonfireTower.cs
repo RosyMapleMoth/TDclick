@@ -4,13 +4,22 @@ using UnityEngine;
 
 public class BonfireTower : Tower
 {
+    private float range;
+    private float rate;
+    private int damage;
 
+    protected override void Initialize()
+    {
+        range = 1;
+        rate = 1;
+        damage = 1;
+    }
 
-	protected override void DealDamage ()
+    protected override void DealDamage ()
 	{
 		foreach (var enemy in GetEnemies ()) {
 			if (enemy != null) {
-				enemy.GetComponentInParent<MonsterAI> ().ChangeHealth (-damage);
+				enemy.GetComponentInParent<MonsterAI> ().ChangeHealth (-1 * damage);
 			}
 		}
 	}
@@ -27,13 +36,14 @@ public class BonfireTower : Tower
 		}
 	}
 
-	protected override float InitRate ()
+	protected override float GetRate ()
 	{
-		return 1f;
+		return rate;
 	}
 
-    protected override void SetRange(GameObject rangeObject)
+    protected override float GetRange()
     {
-        rangeObject.transform.localScale.Set(3, 1, 3);
+        return range;
     }
 }
+
