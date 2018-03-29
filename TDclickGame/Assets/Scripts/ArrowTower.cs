@@ -34,4 +34,9 @@ public class ArrowTower : Tower
 			Debug.Log ("Not Enough gold, needed " + damage * damage);
 		}
 	}
+
+	protected override float InitRate ()
+	{
+		return 2f;
+	}
 }

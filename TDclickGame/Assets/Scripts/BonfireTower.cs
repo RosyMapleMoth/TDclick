@@ -26,4 +26,9 @@ public class BonfireTower : Tower
 			Debug.Log ("Not enough gold, needed " + damage * damage * 10);
 		}
 	}
+
+	protected override float InitRate ()
+	{
+		return 1f;
+	}
 }

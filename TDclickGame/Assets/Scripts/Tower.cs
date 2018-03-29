@@ -11,6 +11,7 @@ abstract public class Tower : MonoBehaviour
 	private float timer;
 	protected GameState gameState;
 	public int damage;
+	private float fireRate;
 
 	// Use this for initialization
 	void Start ()
@@ -20,13 +21,14 @@ abstract public class Tower : MonoBehaviour
 		gameState = GameObject.FindGameObjectWithTag ("GameState").GetComponent<GameState> ();
 		damage = 1;
 		gameState.validClick.AddListener (ClickedOn);
+		fireRate = InitRate ();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
 		timer += Time.deltaTime;
-		if (timer > 1) {
+		if (timer > fireRate) {
 			timer = 0;
 			DealDamage ();
 		}
@@ -81,4 +83,6 @@ abstract public class Tower : MonoBehaviour
 	protected abstract void Upgrade ();
 
 	protected abstract void DealDamage ();
+
+	protected abstract float InitRate ();
 }
