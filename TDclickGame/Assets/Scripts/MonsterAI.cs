@@ -28,7 +28,7 @@ public class MonsterAI : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		Health = 3;
+		//Health = 3;
 		Speed = 1;
 		if (startPath == null) {
 			startPath = GameObject.FindGameObjectWithTag ("Start");

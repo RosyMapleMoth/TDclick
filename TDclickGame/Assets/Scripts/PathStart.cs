@@ -10,6 +10,7 @@ public class PathStart : MonoBehaviour
 	private float counter;
 	private int count;
 	private int waveBreak;
+	private int wave;
 
 	delegate void UpdateFunction ();
 
@@ -18,6 +19,7 @@ public class PathStart : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		wave = 0;
 		waveBreak = 4;
 		updateFunction = NormalUpdate;
 	}
@@ -30,7 +32,8 @@ public class PathStart : MonoBehaviour
 
 	private void SpawnEnemy ()
 	{
-		Instantiate (Enemy, this.transform.position, Quaternion.identity);
+		GameObject enemy = Instantiate (Enemy, this.transform.position, Quaternion.identity);
+		enemy.GetComponent<MonsterAI> ().ChangeHealth (wave * 3);
 	}
 
 	private void NormalUpdate ()
@@ -54,6 +57,7 @@ public class PathStart : MonoBehaviour
 		counter += Time.deltaTime;
 
 		if (counter > waveBreak) {
+			wave += 1;
 			updateFunction = NormalUpdate;
 		}
 	}
