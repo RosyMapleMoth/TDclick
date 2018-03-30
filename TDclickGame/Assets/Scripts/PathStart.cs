@@ -60,6 +60,7 @@ public class PathStart : MonoBehaviour
         if (gameState.ActiveEnemies() == 0) {
             gameState.IncrementWave();
 			updateFunction = NormalUpdate;
+            Debug.Log("Enemy Health: " + gameState.GetWave() * 3);
 		}
 	}
 }

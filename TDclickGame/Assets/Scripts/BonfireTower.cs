@@ -28,12 +28,13 @@ public class BonfireTower : Tower
 	protected override void Upgrade ()
 	{
 		Debug.Log ("Clicked on Bonfire");
-		if (gameState.GetGold () >= damage * damage * 10) {
-			gameState.ChangeGold (-1 * damage * damage * 10);
+        int cost = damage * damage * 10;
+		if (gameState.GetGold () >= cost) {
+			gameState.ChangeGold (-1 * cost);
 			damage = damage + 1;
             rate = rate * .9f;
             range = range * 1.1f;
-			Debug.Log ("Uppgraded Bonfire");
+			Debug.Log ("Uppgraded Bonfire for " + cost.ToString() + ". New DPS: " + damage * 1/rate);
 		} else {
 			Debug.Log ("Not enough gold, needed " + damage * damage * 10);
 		}
