@@ -8,11 +8,12 @@ public class BonfireTower : Tower
     private float rate;
     private int damage;
 
-    protected override void Initialize()
+    protected override void Start()
     {
         range = 1;
         rate = 1;
         damage = 1;
+        base.Start();
     }
 
     protected override void DealDamage ()
@@ -30,6 +31,8 @@ public class BonfireTower : Tower
 		if (gameState.GetGold () >= damage * damage * 10) {
 			gameState.ChangeGold (-1 * damage * damage * 10);
 			damage = damage + 1;
+            rate = rate * .9f;
+            range = range * 1.1f;
 			Debug.Log ("Uppgraded Bonfire");
 		} else {
 			Debug.Log ("Not enough gold, needed " + damage * damage * 10);

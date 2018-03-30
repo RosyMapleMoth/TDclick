@@ -8,12 +8,12 @@ public class ArrowTower : Tower
     private float rate;
     private int damage;
 
-
-    protected override void Initialize()
+    protected override void Start()
     {
         range = 2;
         rate = 2;
         damage = 1;
+        base.Start();
     }
 
     protected override void DealDamage ()
@@ -40,7 +40,9 @@ public class ArrowTower : Tower
 		if (gameState.GetGold () >= damage * damage) {
 			gameState.ChangeGold (-1 * damage * damage);
 			damage = damage + 1;
-			Debug.Log ("Upgraded Arrow");
+            rate = rate * .9f;
+            range = range * 1.1f;
+            Debug.Log ("Upgraded Arrow");
 		} else {
 			Debug.Log ("Not Enough gold, needed " + damage * damage);
 		}

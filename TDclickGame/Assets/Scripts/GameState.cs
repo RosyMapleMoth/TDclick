@@ -17,6 +17,11 @@ public class GameState : MonoBehaviour
 	public UnityEvent validClick;
 	public Text gameOver;
 
+
+    private List<GameObject> activeEnemies;
+    private int wave;
+    public Text waveCount;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -25,6 +30,8 @@ public class GameState : MonoBehaviour
 		//This was activating AFTER the bonfire and BEFORE the arrow tower, so only the arrow tower was listening.
 		score = 0;
 		lives = 10;
+        wave = 0;
+        IncrementWave();
 	}
 	
 	// Update is called once per frame
@@ -33,7 +40,7 @@ public class GameState : MonoBehaviour
 		goldCount.text = "Gold: " + gold.ToString ();
 		scoreCount.text = "Score: " + score.ToString ();
 		livesCount.text = "Lives: " + lives.ToString ();
-
+        waveCount.text = "Wave: " + wave.ToString();
 
 		if (lives < 1) {
 			gameOver.text = "Game Over!\nYour Score: " + score.ToString ();
@@ -59,4 +66,31 @@ public class GameState : MonoBehaviour
 	{
 		score += extraScore;
 	}
+
+    public void IncrementWave ()
+    {
+        wave += 1;
+        activeEnemies = new List<GameObject>();
+    }
+
+    public int GetWave()
+    {
+        return wave;
+    }
+
+    public int ActiveEnemies()
+    {
+        return activeEnemies.Count;
+    }
+
+    public void AddEnemy (GameObject enemy)
+    {
+        activeEnemies.Add(enemy);
+        enemy.GetComponent<MonsterAI>().Death.AddListener(EnemyDeath);
+    }
+
+    private void EnemyDeath(GameObject enemy)
+    {
+        activeEnemies.Remove(enemy);
+    }
 }

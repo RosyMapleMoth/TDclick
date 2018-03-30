@@ -13,9 +13,8 @@ abstract public class Tower : MonoBehaviour
     public GameObject RangeObject;
 
 	// Use this for initialization
-	void Start ()
+	  protected virtual void Start ()
 	{
-        Initialize();
 		enemiesInRange = new List<GameObject> ();
 		timer = 0;
 		gameState = GameObject.FindGameObjectWithTag ("GameState").GetComponent<GameState> ();
@@ -90,6 +89,8 @@ abstract public class Tower : MonoBehaviour
 	{
 		if (gameState.objectClicked != null && gameState.objectClicked == this.gameObject) {
 			Upgrade ();
+            SetRange();
+            fireRate = GetRate();
 		}
 	}
 
@@ -107,6 +108,4 @@ abstract public class Tower : MonoBehaviour
 	protected abstract float GetRate ();
 
     protected abstract float GetRange();
-
-    protected abstract void Initialize();
 }
