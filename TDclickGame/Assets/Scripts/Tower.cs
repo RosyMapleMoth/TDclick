@@ -20,6 +20,7 @@ abstract public class Tower : MonoBehaviour
 		gameState = GameObject.FindGameObjectWithTag ("GameState").GetComponent<GameState> ();
 
 		gameState.validClick.AddListener (ClickedOn);
+        gameState.newWave.AddListener(NewWave);
 		fireRate = GetRate ();
 
         RangeObject = Instantiate(this.RangeObject);
@@ -99,6 +100,11 @@ abstract public class Tower : MonoBehaviour
         float range = GetRange();
         float towerRangeValue = range * 4 + 2;
         RangeObject.transform.localScale = new Vector3(towerRangeValue, 1, towerRangeValue);
+    }
+
+    private void NewWave()
+    {
+        enemiesInRange = new List<GameObject>();
     }
 
 	protected abstract void Upgrade ();

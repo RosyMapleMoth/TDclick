@@ -15,6 +15,7 @@ public class GameState : MonoBehaviour
 	public Text livesCount;
 	public GameObject objectClicked;
 	public UnityEvent validClick;
+    public UnityEvent newWave;
 	public Text gameOver;
 
 
@@ -71,6 +72,7 @@ public class GameState : MonoBehaviour
     {
         wave += 1;
         activeEnemies = new List<GameObject>();
+        newWave.Invoke();
     }
 
     public int GetWave()
