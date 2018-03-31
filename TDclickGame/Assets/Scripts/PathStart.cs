@@ -9,8 +9,7 @@ public class PathStart : MonoBehaviour
 	public GameObject Enemy;
 	private float counter;
 	private int count;
-	private int waveBreak;
-
+	
 	delegate void UpdateFunction ();
 
 	UpdateFunction updateFunction;
@@ -20,8 +19,8 @@ public class PathStart : MonoBehaviour
 	{
         //gameState = GameObject.FindGameObjectWithTag("GameState").GetComponent<GameState>();
         gameState = FindObjectOfType<GameState>();
-        waveBreak = 4;
-		updateFunction = NormalUpdate;
+		updateFunction = BlankUpdate;
+        gameState.newWave.AddListener(GameStart);
 	}
 	
 	// Update is called once per frame
@@ -63,4 +62,13 @@ public class PathStart : MonoBehaviour
             Debug.Log("Enemy Health: " + gameState.GetWave() * 3);
 		}
 	}
+
+    private void GameStart()
+    {
+        updateFunction = NormalUpdate;
+        gameState.newWave.RemoveListener(GameStart);
+    }
+
+    private void BlankUpdate()
+    { }
 }

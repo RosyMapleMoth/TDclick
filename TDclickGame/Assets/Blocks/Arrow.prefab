@@ -22,10 +22,10 @@ GameObject:
   - component: {fileID: 33904539134964496}
   - component: {fileID: 136013343259174010}
   - component: {fileID: 23514380643306478}
-  - component: {fileID: 114675530172857924}
+  - component: {fileID: 114816122007961580}
   m_Layer: 0
   m_Name: Arrow
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,7 +84,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1940722932232900}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114675530172857924
+--- !u!114 &114816122007961580
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -95,7 +95,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22394ed6cddfd6d45b0c791b011fe691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
   RangeObject: {fileID: 1294385239679356, guid: 893722c40f44e5144aa4c1992f8eca81,
     type: 2}
 --- !u!136 &136013343259174010

@@ -48,13 +48,18 @@ public class ArrowTower : Tower
 		}
 	}
 
-	protected override float GetRate ()
+	public override float GetRate ()
 	{
 		return rate;
 	}
 
-    protected override float GetRange()
+    public override float GetRange()
     {
         return range;
+    }
+
+    public override int GetDamage()
+    {
+        return damage;
     }
 }

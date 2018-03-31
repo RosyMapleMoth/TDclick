@@ -86,14 +86,28 @@ abstract public class Tower : MonoBehaviour
 		return enemiesInRange;
 	}
 
-	public void ClickedOn ()
-	{
-		if (gameState.objectClicked != null && gameState.objectClicked == this.gameObject) {
-			Upgrade ();
-            SetRange();
-            fireRate = GetRate();
-		}
-	}
+    public void ClickedOn()
+    {
+        if (gameState.objectClicked != null)
+        {
+            GameObject tower;
+            if (gameState.objectClicked == this.gameObject)
+            {
+                Upgrade();
+                SetRange();
+                fireRate = GetRate();
+            }
+            else if (gameState.objectClicked.CompareTag("TowerBase") && gameState.objectClicked.GetComponent<CreateTower>().GetTower(out tower))
+            {
+                if (tower == this.gameObject)
+                {
+                    Upgrade();
+                    SetRange();
+                    fireRate = GetRate();
+                }
+            }
+        }
+    }
 
     private void SetRange ()
     {
@@ -111,7 +125,9 @@ abstract public class Tower : MonoBehaviour
 
 	protected abstract void DealDamage ();
 
-	protected abstract float GetRate ();
+	public abstract float GetRate ();
 
-    protected abstract float GetRange();
+    public abstract float GetRange();
+
+    public abstract int GetDamage();
 }

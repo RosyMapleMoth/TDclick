@@ -9,6 +9,8 @@ TagManager:
   - End
   - Enemy
   - GameState
+  - Tower
+  - TowerBase
   layers:
   - Default
   - TransparentFX
