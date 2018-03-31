@@ -38,7 +38,6 @@ public class MonsterAI : MonoBehaviour
 		distance = 0;
 		gameState = GameObject.FindGameObjectWithTag ("GameState").GetComponent<GameState> ();
 		alive = true;
-		Death = new GameObjectEvent ();
 	}
 
 	// Update is called once per frame
@@ -55,6 +54,7 @@ public class MonsterAI : MonoBehaviour
 					nextPath = nextPath.GetComponent<Path> ().nextPath;
 				} catch {
 					gameState.LoseLife ();
+                    Death.Invoke(this.gameObject);
 					GameObject.Destroy (this.gameObject);
 				}
 			} else {
@@ -68,15 +68,16 @@ public class MonsterAI : MonoBehaviour
 			damageTimer += Time.deltaTime;
 
 			if (alive && Health < 1) {
-				Death.Invoke (this.gameObject);
+                gameState.ChangeGold(gameState.GetWave());
+                gameState.IncreaseScore(gameState.GetWave());
+                Death.Invoke (this.gameObject);
+                alive = false;
 			}
 
 			if (damageTimer > .2f) {
 				gameObject.GetComponentInChildren<MeshRenderer> ().material = normalMat;
 
 				if (Health < 1) {
-					gameState.ChangeGold (1);
-					gameState.IncreaseScore (1);
 					GameObject.Destroy (this.gameObject);
 				}
 			}

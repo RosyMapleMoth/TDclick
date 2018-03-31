@@ -4,13 +4,23 @@ using UnityEngine;
 
 public class BonfireTower : Tower
 {
+    private float range;
+    private float rate;
+    private int damage;
 
+    protected override void Start()
+    {
+        range = 1;
+        rate = .5f;
+        damage = 1;
+        base.Start();
+    }
 
-	protected override void DealDamage ()
+    protected override void DealDamage ()
 	{
 		foreach (var enemy in GetEnemies ()) {
 			if (enemy != null) {
-				enemy.GetComponentInParent<MonsterAI> ().ChangeHealth (-damage);
+				enemy.GetComponentInParent<MonsterAI> ().ChangeHealth (-1 * damage);
 			}
 		}
 	}
@@ -18,17 +28,29 @@ public class BonfireTower : Tower
 	protected override void Upgrade ()
 	{
 		Debug.Log ("Clicked on Bonfire");
-		if (gameState.GetGold () >= damage * damage * 10) {
-			gameState.ChangeGold (-1 * damage * damage * 10);
+        int cost = damage * damage * 10;
+		if (gameState.GetGold () >= cost) {
+			gameState.ChangeGold (-1 * cost);
 			damage = damage + 1;
-			Debug.Log ("Uppgraded Bonfire");
+			Debug.Log ("Uppgraded Bonfire for " + cost.ToString() + ". New DPS: " + damage * 1/rate);
 		} else {
 			Debug.Log ("Not enough gold, needed " + damage * damage * 10);
 		}
 	}
 
-	protected override float InitRate ()
+	public override float GetRate ()
 	{
-		return 1f;
+		return rate;
 	}
+
+    public override float GetRange()
+    {
+        return range;
+    }
+
+    public override int GetDamage()
+    {
+        return damage;
+    }
 }
+
