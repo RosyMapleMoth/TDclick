@@ -6,23 +6,36 @@ using UnityEngine.Events;
 
 abstract public class Tower : MonoBehaviour
 {
-
 	private List<GameObject> enemiesInRange;
 	private float timer;
 	protected GameState gameState;
-	public int damage;
 	private float fireRate;
+    public GameObject RangeObject;
 
 	// Use this for initialization
-	void Start ()
+	  protected virtual void Start ()
 	{
 		enemiesInRange = new List<GameObject> ();
 		timer = 0;
 		gameState = GameObject.FindGameObjectWithTag ("GameState").GetComponent<GameState> ();
-		damage = 1;
+
 		gameState.validClick.AddListener (ClickedOn);
-		fireRate = InitRate ();
-	}
+        gameState.newWave.AddListener(NewWave);
+		fireRate = GetRate ();
+
+        RangeObject = Instantiate(this.RangeObject);
+        RangeObject.transform.parent = this.transform;
+        RangeObject.transform.SetPositionAndRotation(new Vector3(0, -.1f, 0) + gameObject.transform.position, Quaternion.identity);
+
+        TowerRange towerRange = RangeObject.GetComponent<TowerRange>();
+        towerRange.monsterEntered = new TowerRange.GameObjectEvent();
+        towerRange.monsterExited = new TowerRange.GameObjectEvent();
+
+        towerRange.monsterEntered.AddListener(DetectedEnemy);
+        towerRange.monsterExited.AddListener(EnemyLeft);
+
+        SetRange();
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -35,17 +48,17 @@ abstract public class Tower : MonoBehaviour
 
 	}
 
-	private void OnTriggerEnter (Collider other)
+	private void DetectedEnemy (GameObject other)
 	{
-		if (other.gameObject.CompareTag ("Enemy")) {
-			enemiesInRange.Add (other.gameObject);
-			other.gameObject.GetComponentInParent<MonsterAI> ().Death.AddListener (EnemyDeath);
+		if (other.CompareTag ("Enemy")) {
+			enemiesInRange.Add (other);
+			other.GetComponentInParent<MonsterAI> ().Death.AddListener (EnemyDeath);
 		}
 	}
 
-	private void OnTriggerExit (Collider other)
+	private void EnemyLeft (GameObject other)
 	{
-		enemiesInRange.Remove (other.gameObject);
+		enemiesInRange.Remove (other);
 	}
 
 	private void EnemyDeath (GameObject enemy)
@@ -73,16 +86,48 @@ abstract public class Tower : MonoBehaviour
 		return enemiesInRange;
 	}
 
-	public void ClickedOn ()
-	{
-		if (gameState.objectClicked != null && gameState.objectClicked == this.gameObject) {
-			Upgrade ();
-		}
-	}
+    public void ClickedOn()
+    {
+        if (gameState.objectClicked != null)
+        {
+            GameObject tower;
+            if (gameState.objectClicked == this.gameObject)
+            {
+                Upgrade();
+                SetRange();
+                fireRate = GetRate();
+            }
+            else if (gameState.objectClicked.CompareTag("TowerBase") && gameState.objectClicked.GetComponent<CreateTower>().GetTower(out tower))
+            {
+                if (tower == this.gameObject)
+                {
+                    Upgrade();
+                    SetRange();
+                    fireRate = GetRate();
+                }
+            }
+        }
+    }
+
+    private void SetRange ()
+    {
+        float range = GetRange();
+        float towerRangeValue = range * 4 + 2;
+        RangeObject.transform.localScale = new Vector3(towerRangeValue, 1, towerRangeValue);
+    }
+
+    private void NewWave()
+    {
+        enemiesInRange = new List<GameObject>();
+    }
 
 	protected abstract void Upgrade ();
 
 	protected abstract void DealDamage ();
 
-	protected abstract float InitRate ();
+	public abstract float GetRate ();
+
+    public abstract float GetRange();
+
+    public abstract int GetDamage();
 }
