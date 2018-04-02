@@ -4,20 +4,21 @@ using UnityEngine;
 
 public class BonfireTower : Tower
 {
-    private float range;
-    private float rate;
-    private int damage;
-    private int baseCost = 10; 
+	private float range;
+	private float rate;
+	private int damage;
+	private int baseCost;
 
-    protected override void Start()
-    {
-        range = 1;
-        rate = .5f;
-        damage = 1;
-        base.Start();
-    }
+	protected override void Start ()
+	{
+		range = 1;
+		rate = .5f;
+		damage = 1;
+		baseCost = 10;
+		base.Start ();
+	}
 
-    protected override void DealDamage ()
+	protected override void DealDamage ()
 	{
 		foreach (var enemy in GetEnemies ()) {
 			if (enemy != null) {
@@ -29,11 +30,11 @@ public class BonfireTower : Tower
 	protected override void Upgrade ()
 	{
 		Debug.Log ("Clicked on Bonfire");
-        int cost = damage * damage * baseCost;
+		int cost = damage * damage * baseCost;
 		if (gameState.GetGold () >= cost) {
 			gameState.ChangeGold (-1 * cost);
 			damage = damage + 1;
-			Debug.Log ("Uppgraded Bonfire for " + cost.ToString() + ". New DPS: " + damage * 1/rate);
+			Debug.Log ("Uppgraded Bonfire for " + cost.ToString () + ". New DPS: " + damage * 1 / rate);
 		} else {
 			Debug.Log ("Not enough gold, needed " + damage * damage * 10);
 		}
@@ -44,14 +45,19 @@ public class BonfireTower : Tower
 		return rate;
 	}
 
-    public override float GetRange()
-    {
-        return range;
-    }
+	public override float GetRange ()
+	{
+		return range;
+	}
 
-    public override int GetDamage()
-    {
-        return damage;
-    }
+	public override int GetDamage ()
+	{
+		return damage;
+	}
+
+	public override int GetBaseCost ()
+	{
+		return baseCost;
+	}
 }
 

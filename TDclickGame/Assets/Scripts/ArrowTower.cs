@@ -4,19 +4,21 @@ using UnityEngine;
 
 public class ArrowTower : Tower
 {
-    private float range;
-    private float rate;
-    private int damage;
+	private float range;
+	private float rate;
+	private int damage;
+	private int baseCost;
 
-    protected override void Start()
-    {
-        range = 2;
-        rate = 2;
-        damage = 1;
-        base.Start();
-    }
+	protected override void Start ()
+	{
+		range = 2;
+		rate = 2;
+		damage = 1;
+		baseCost = 1;
+		base.Start ();
+	}
 
-    protected override void DealDamage ()
+	protected override void DealDamage ()
 	{
 		float leaderDistance = 0;
 		GameObject leader = null;
@@ -40,9 +42,9 @@ public class ArrowTower : Tower
 		if (gameState.GetGold () >= damage * damage) {
 			gameState.ChangeGold (-1 * damage * damage);
 			damage = damage + 1;
-            rate = rate * .9f;
-            range = range * 1.1f;
-            Debug.Log ("Upgraded Arrow");
+			rate = rate * .9f;
+			range = range * 1.1f;
+			Debug.Log ("Upgraded Arrow");
 		} else {
 			Debug.Log ("Not Enough gold, needed " + damage * damage);
 		}
@@ -53,13 +55,18 @@ public class ArrowTower : Tower
 		return rate;
 	}
 
-    public override float GetRange()
-    {
-        return range;
-    }
+	public override float GetRange ()
+	{
+		return range;
+	}
 
-    public override int GetDamage()
-    {
-        return damage;
-    }
+	public override int GetDamage ()
+	{
+		return damage;
+	}
+
+	public override int GetBaseCost ()
+	{
+		return baseCost;
+	}
 }
