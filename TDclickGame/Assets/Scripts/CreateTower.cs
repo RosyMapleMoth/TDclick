@@ -1,12 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CreateTower : MonoBehaviour {
 
+    public Canvas towerCreationMenu;
     private GameState gameState;
     public GameObject bonfireTower;
     private bool instantiated;
+    public Button[] towerSelectionButtons;
+    public GameObject[] Towers;
+
+
 
 	// Use this for initialization
 	void Start () {
@@ -26,7 +32,13 @@ public class CreateTower : MonoBehaviour {
         {
             if (!instantiated)
             {
-                MakeTower();
+                towerCreationMenu.gameObject.SetActive(true);
+                for(int i = 0; i < towerSelectionButtons.Length; i++)
+                {
+                    //towerSelectionButtons[i].onClick.AddListener()
+                }
+
+                //MakeTower();
             }
         }
     }
@@ -42,7 +54,7 @@ public class CreateTower : MonoBehaviour {
         return false;
     }
 
-    private void MakeTower()
+    private void MakeTower(int index)
     {
         if (gameState.GetGold() >= 10)
         {

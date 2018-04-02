@@ -7,6 +7,7 @@ public class BonfireTower : Tower
     private float range;
     private float rate;
     private int damage;
+    private int baseCost = 10; 
 
     protected override void Start()
     {
@@ -28,7 +29,7 @@ public class BonfireTower : Tower
 	protected override void Upgrade ()
 	{
 		Debug.Log ("Clicked on Bonfire");
-        int cost = damage * damage * 10;
+        int cost = damage * damage * baseCost;
 		if (gameState.GetGold () >= cost) {
 			gameState.ChangeGold (-1 * cost);
 			damage = damage + 1;
