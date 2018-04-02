@@ -50,14 +50,25 @@ public class BonfireTower : Tower
 		return range;
 	}
 
+<<<<<<< Updated upstream
 	public override int GetDamage ()
 	{
 		return damage;
 	}
 
+=======
+    public override int GetDamage()
+    {
+        return damage;
+    }
+>>>>>>> Stashed changes
 	public override int GetBaseCost ()
 	{
 		return baseCost;
 	}
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 }
 
