@@ -4,24 +4,17 @@ using UnityEngine;
 
 public class ArrowTower : Tower
 {
-<<<<<<< Updated upstream
+
 	private float range;
 	private float rate;
 	private int damage;
-	private int baseCost;
-=======
-    private float range;
-    private float rate;
-	private int damage;
-	private int baseCost = 5;
->>>>>>> Stashed changes
+	private int baseCost = 1;
 
 	protected override void Start ()
 	{
 		range = 2;
 		rate = 2;
 		damage = 1;
-		baseCost = 1;
 		base.Start ();
 	}
 
@@ -67,17 +60,10 @@ public class ArrowTower : Tower
 		return range;
 	}
 
-<<<<<<< Updated upstream
 	public override int GetDamage ()
 	{
 		return damage;
 	}
-=======
-    public override int GetDamage()
-    {
-        return damage;
-    }
->>>>>>> Stashed changes
 
 	public override int GetBaseCost ()
 	{
