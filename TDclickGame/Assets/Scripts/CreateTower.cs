@@ -1,12 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class CreateTower : MonoBehaviour {
 
+
+
+
+	public UnityEvent openMenu;
+	public UnityEvent closeMenu;
+    public Canvas towerCreationMenu;
     private GameState gameState;
-    public GameObject bonfireTower;
+    public GameObject heldTower;
     private bool instantiated;
+    public Button[] towerSelectionButtons;
+    public GameObject[] Towers;
+
+	public class intEvent : UnityEvent<int>
+	{}
 
 	// Use this for initialization
 	void Start () {
@@ -25,32 +38,56 @@ public class CreateTower : MonoBehaviour {
         if (gameState.objectClicked == gameObject)
         {
             if (!instantiated)
-            {
-                MakeTower();
-            }
-        }
-    }
+			{
+				OpenMenu ();
+			}
+    	}
+	}
 
     public bool GetTower( out GameObject tower)
     {
         if (instantiated)
         {
-            tower = bonfireTower;
+			tower = heldTower;
             return true;
+
         }
         tower = null;
         return false;
     }
 
-    private void MakeTower()
+	public void MakeTower(GameObject towertoInst)
     {
-        if (gameState.GetGold() >= 10)
+		if (gameState.GetGold() >= towertoInst.GetComponent<Tower>().GetBaseCost())
         {
-            bonfireTower = Instantiate(bonfireTower, this.transform.position + Vector3.up, Quaternion.identity);
-            gameState.ChangeGold(-10);
+			heldTower = Instantiate(towertoInst, this.transform.position + Vector3.up, Quaternion.identity);
+			gameState.ChangeGold(towertoInst.GetComponent<Tower>().GetBaseCost()*(-1));
 
             gameState.GetComponent<GameState>().validClick.RemoveListener(ClickedOn);
             instantiated = true;
+
+			CloseMenu ();
         }
     }
+
+
+	public void OpenMenu()
+	{
+		openMenu.Invoke ();
+		towerCreationMenu.gameObject.SetActive(true);
+		towerSelectionButtons[0].onClick.AddListener( () => MakeTower(Towers[0]));        	
+		towerSelectionButtons[1].onClick.AddListener( () => MakeTower(Towers[1]));  
+		Debug.Log("openeing menu");
+
+	}
+
+	public void CloseMenu()
+	{
+		closeMenu.Invoke ();
+		towerCreationMenu.gameObject.SetActive(false);
+		towerSelectionButtons [0].onClick.RemoveAllListeners();
+		towerSelectionButtons [1].onClick.RemoveAllListeners();
+		Debug.Log("closing menu");
+
+	}
 }

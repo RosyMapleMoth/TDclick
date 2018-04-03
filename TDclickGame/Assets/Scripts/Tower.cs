@@ -130,4 +130,6 @@ abstract public class Tower : MonoBehaviour
     public abstract float GetRange();
 
     public abstract int GetDamage();
+
+    public abstract int GetBaseCost();
 }
