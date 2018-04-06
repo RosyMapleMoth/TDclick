@@ -52,7 +52,6 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -68,7 +67,6 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -107,5 +105,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82c101d514268cb4394645c67b9b321c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bonfireTower: {fileID: 1930387944217018, guid: 1c29fb17dd7ed1e4e8d3094d7e94874e,
+  buttonTemplate: {fileID: 1637355931605998, guid: 2f1b00165b017ea49b91db47bfcd700a,
     type: 2}
+  blockPrefabs:
+  - {fileID: 1454993493574590}
+  - {fileID: 1573972041057746, guid: d792ab4588f980349adca00a1e0f28cc, type: 2}
+  - {fileID: 1336249484708048, guid: da93e153d418fc849853ea68d49a8db8, type: 2}
+  - {fileID: 1537571589732772, guid: 3f456f21672f0d94dba503d8481202bb, type: 2}
+  openMenu:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  closeMenu:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  towerCreationMenu: {fileID: 0}
+  heldTower: {fileID: 0}
+  towerSelectionButtons:
+  - {fileID: 0}
+  - {fileID: 0}
+  Towers:
+  - {fileID: 1930387944217018, guid: 1c29fb17dd7ed1e4e8d3094d7e94874e, type: 2}
+  - {fileID: 1940722932232900, guid: 1f2d5c503a4a10f44a23930c1c98b26e, type: 2}

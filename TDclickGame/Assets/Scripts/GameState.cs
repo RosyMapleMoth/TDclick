@@ -17,8 +17,10 @@ public class GameState : MonoBehaviour
     public GameObject objectHovered;
 	public UnityEvent validClick;
     public UnityEvent newWave;
+    public UnityEvent boardMade;
 	public Text gameOver;
     public Button startButton;
+    private bool boardInitialized;
 
     private List<GameObject> activeEnemies;
     private int wave;
@@ -28,12 +30,14 @@ public class GameState : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		gold = 10;
+		gold = 100;
 		//validClick = new UnityEvent(); //This isnt needed because apparently UnityEvents are automatically created.
 		//This was activating AFTER the bonfire and BEFORE the arrow tower, so only the arrow tower was listening.
 		score = 0;
 		lives = 10;
         wave = 0;
+
+        boardInitialized = false;
 	}
 	
 	// Update is called once per frame
@@ -151,7 +155,7 @@ public class GameState : MonoBehaviour
         activeEnemies.Remove(enemy);
     }
 
-    public void StartGame()
+    private void StartGame()
     {
         if (wave == 0)
         {
@@ -159,5 +163,18 @@ public class GameState : MonoBehaviour
             //startButton.interactable = false;
             startButton.gameObject.SetActive(false);
         }
+    }
+
+    public void MapDone()
+    {
+        startButton.onClick.AddListener(StartGame);
+        startButton.GetComponentInChildren<Text>().text = "Start";
+
+        boardInitialized = true;
+    }
+
+    public bool IsBoardInitialized()
+    {
+        return boardInitialized;
     }
 }

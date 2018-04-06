@@ -14,16 +14,8 @@ public class MouseController : MonoBehaviour
 	void Start ()
 	{
 		gameState = GameObject.FindGameObjectWithTag ("GameState").GetComponent<GameState> ();
-		GameObject[] blocks = GameObject.FindGameObjectsWithTag ("TowerBase");
 
-
-		foreach (GameObject thisBlock in blocks)
-		{
-			thisBlock.GetComponent<CreateTower>().closeMenu.AddListener(() => (leavingmenu = true));
-
-			thisBlock.GetComponent<CreateTower>().openMenu.AddListener(() => (buildMenu = true));
-		}
-
+        gameState.boardMade.AddListener(InitializeButtons);
 	}
 
     // Update is called once per frame
@@ -54,7 +46,17 @@ public class MouseController : MonoBehaviour
 
     }
 
+    private void InitializeButtons()
+    {
+        GameObject[] blocks = GameObject.FindGameObjectsWithTag("TowerBase");
 
+        foreach (GameObject thisBlock in blocks)
+        {
+            thisBlock.GetComponent<CreateTower>().closeMenu.AddListener(closeMenu);
+
+            thisBlock.GetComponent<CreateTower>().openMenu.AddListener(openMenu);
+        }
+    }
 
 	public void openMenu()
 	{
@@ -63,7 +65,7 @@ public class MouseController : MonoBehaviour
 
 	public void closeMenu()
 	{
-		buildMenu = false;
+        leavingmenu = true;
 	}
 
 }
