@@ -5,7 +5,6 @@ using UnityEngine;
 public class PathStart : MonoBehaviour
 {
     private GameState gameState;
-	public GameObject nextPath;
 	public GameObject Enemy;
 	private float counter;
 	private int count;

@@ -11,6 +11,7 @@ TagManager:
   - GameState
   - Tower
   - TowerBase
+  - Initialize Cube
   layers:
   - Default
   - TransparentFX
