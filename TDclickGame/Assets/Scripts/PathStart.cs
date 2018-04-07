@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class PathStart : MonoBehaviour
 {
-    private GameState gameState;
+	private GameState gameState;
 	public GameObject Enemy;
 	private float counter;
 	private int count;
-	
+
 	delegate void UpdateFunction ();
 
 	UpdateFunction updateFunction;
@@ -16,10 +16,10 @@ public class PathStart : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-        //gameState = GameObject.FindGameObjectWithTag("GameState").GetComponent<GameState>();
-        gameState = FindObjectOfType<GameState>();
+		//gameState = GameObject.FindGameObjectWithTag("GameState").GetComponent<GameState>();
+		gameState = FindObjectOfType<GameState> ();
 		updateFunction = BlankUpdate;
-        gameState.newWave.AddListener(GameStart);
+		gameState.newWave.AddListener (GameStart);
 	}
 	
 	// Update is called once per frame
@@ -31,10 +31,11 @@ public class PathStart : MonoBehaviour
 	private void SpawnEnemy ()
 	{
 		GameObject enemy = Instantiate (Enemy, this.transform.position, Quaternion.identity);
-        enemy.GetComponent<MonsterAI>().Death = new MonsterAI.GameObjectEvent();
-        enemy.GetComponent<MonsterAI> ().ChangeHealth (gameState.GetWave() * 3);
-        gameState.AddEnemy(enemy);
-    }
+		enemy.GetComponent<MonsterAI> ().Death = new MonsterAI.GameObjectEvent ();
+		enemy.GetComponent<MonsterAI> ().ChangeHealth (gameState.GetWave () * 3);
+		enemy.GetComponent<MonsterAI> ().startPath = gameObject;
+		gameState.AddEnemy (enemy);
+	}
 
 	private void NormalUpdate ()
 	{
@@ -47,27 +48,32 @@ public class PathStart : MonoBehaviour
 		}
 
 		if (/*count % 10 == 0*/ count > 9) {
-            count = 0;
+			count = 0;
 			updateFunction = WaveBreakUpdate;
+			gameState.newWave.AddListener (NewWave);
+			gameState.waveOver.Invoke ();
 		}
 
 	}
 
 	private void WaveBreakUpdate ()
 	{
-        if (gameState.ActiveEnemies() == 0) {
-            gameState.IncrementWave();
-			updateFunction = NormalUpdate;
-            Debug.Log("Enemy Health: " + gameState.GetWave() * 3);
-		}
+
+
 	}
 
-    private void GameStart()
-    {
-        updateFunction = NormalUpdate;
-        gameState.newWave.RemoveListener(GameStart);
-    }
+	private void NewWave ()
+	{
+		updateFunction = NormalUpdate;
+	}
 
-    private void BlankUpdate()
-    { }
+	private void GameStart ()
+	{
+		updateFunction = NormalUpdate;
+		gameState.newWave.RemoveListener (GameStart);
+	}
+
+	private void BlankUpdate ()
+	{
+	}
 }
