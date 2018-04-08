@@ -28,7 +28,6 @@ public class MonsterAI : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		//Health = 3;
 		Speed = 1;
 		if (startPath == null) {
 			startPath = GameObject.FindGameObjectWithTag ("Start");
@@ -37,6 +36,7 @@ public class MonsterAI : MonoBehaviour
 		damageTimer = .2f;
 		distance = 0;
 		gameState = GameObject.FindGameObjectWithTag ("GameState").GetComponent<GameState> ();
+		Health = gameState.GetWave () * 3;
 		alive = true;
 	}
 
@@ -54,7 +54,7 @@ public class MonsterAI : MonoBehaviour
 					nextPath = nextPath.GetComponent<Path> ().nextPath;
 				} catch {
 					gameState.LoseLife ();
-                    Death.Invoke(this.gameObject);
+					Death.Invoke (this.gameObject);
 					GameObject.Destroy (this.gameObject);
 				}
 			} else {
@@ -64,34 +64,52 @@ public class MonsterAI : MonoBehaviour
 			}
 		}
 
-		if (damageTimer < .2f) {
-			damageTimer += Time.deltaTime;
+		if (damageTimer > 0 && alive) {
+			gameObject.GetComponentInChildren<MeshRenderer> ().material.color = Color.Lerp (Color.black, Color.red, damageTimer);
 
-			if (alive && Health < 1) {
-                gameState.ChangeGold(gameState.GetWave());
-                gameState.IncreaseScore(gameState.GetWave());
-                Death.Invoke (this.gameObject);
-                alive = false;
+			damageTimer -= Time.deltaTime;
+
+			if (damageTimer < 0) {
+				gameObject.GetComponentInChildren<MeshRenderer> ().material.color = Color.black;
+				damageTimer = 0;
 			}
+		} else if (damageTimer > 0 && !alive) {
+			gameObject.GetComponentInChildren<MeshRenderer> ().material.color = Color.Lerp (Color.clear, Color.red, damageTimer);
 
-			if (damageTimer > .2f) {
-				gameObject.GetComponentInChildren<MeshRenderer> ().material = normalMat;
+			damageTimer -= Time.deltaTime;
 
-				if (Health < 1) {
-					GameObject.Destroy (this.gameObject);
-				}
+			if (damageTimer < 0) {
+				gameObject.GetComponentInChildren<MeshRenderer> ().material.color = Color.clear;
+				damageTimer = 0;
+				GameObject.Destroy (gameObject);
 			}
-            
-		}      
+		}     
 	}
 
 	public void ChangeHealth (int change)
 	{
-		Health += change;
-		if (change < 0) {
-			gameObject.GetComponentInChildren<MeshRenderer> ().material = damageMat;
-			damageTimer = 0;
+		if (Health > 0) {
+			Health += change;
+			if (change < 0) {
+				damageTimer = 1;
+
+				if (Health < 1) {
+					gameState.ChangeGold (gameState.GetWave ());
+					gameState.IncreaseScore (gameState.GetWave ());
+					Death.Invoke (this.gameObject);
+					alive = false;
+				}
+			}
+		} else {
+			Debug.Log ("Damaged dead Enemy");
+			Death.Invoke (this.gameObject);
+			alive = false;
 		}
+	}
+
+	public bool isAlive ()
+	{
+		return alive;
 	}
 
 	public float GetDistance ()

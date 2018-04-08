@@ -32,7 +32,7 @@ public class GameState : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		gold = 100;
+		gold = 10;
 		//validClick = new UnityEvent(); //This isnt needed because apparently UnityEvents are automatically created.
 		//This was activating AFTER the bonfire and BEFORE the arrow tower, so only the arrow tower was listening.
 		score = 0;
