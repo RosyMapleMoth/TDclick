@@ -8,20 +8,47 @@ public class BonfireTower : Tower
 	private float rate;
 	private int damage;
 	private int baseCost = 10;
+	private float bonfireTimer;
 
 	protected override void Start ()
 	{
 		range = 1;
 		rate = .5f;
 		damage = 1;
+		bonfireTimer = 0f;
 		base.Start ();
+	}
+
+	protected override void Update ()
+	{
+		if (bonfireTimer > 0) {
+
+			MeshRenderer mesh = base.RangeObject.GetComponent<MeshRenderer> ();
+
+			Color color = Color.Lerp (Color.blue, Color.red, bonfireTimer);
+			color.a = .3f;
+			mesh.material.color = color;
+
+			bonfireTimer -= Time.deltaTime * 5f;
+
+			if (bonfireTimer < 0) {
+				color = Color.blue;
+				color.a = .3f;
+				mesh.material.color = color;
+
+				bonfireTimer = 0;
+			}
+		}
+
+		base.Update ();
 	}
 
 	protected override void DealDamage ()
 	{
 		foreach (var enemy in GetEnemies ()) {
-			if (enemy != null) {
+			if (enemy != null && enemy.GetComponentInParent<MonsterAI> ().isAlive ()) {
 				enemy.GetComponentInParent<MonsterAI> ().ChangeHealth (-1 * damage);
+				bonfireTimer = 1f;
 			}
 		}
 	}

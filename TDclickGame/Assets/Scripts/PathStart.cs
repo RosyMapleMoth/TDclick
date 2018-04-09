@@ -32,7 +32,6 @@ public class PathStart : MonoBehaviour
 	{
 		GameObject enemy = Instantiate (Enemy, this.transform.position, Quaternion.identity);
 		enemy.GetComponent<MonsterAI> ().Death = new MonsterAI.GameObjectEvent ();
-		enemy.GetComponent<MonsterAI> ().ChangeHealth (gameState.GetWave () * 3);
 		enemy.GetComponent<MonsterAI> ().startPath = gameObject;
 		gameState.AddEnemy (enemy);
 	}
