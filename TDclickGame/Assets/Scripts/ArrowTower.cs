@@ -15,7 +15,7 @@ public class ArrowTower : Tower
 	protected override void Start ()
 	{
 		range = 2;
-		rate = 2;
+		rate = 1f;
 		damage = 1;
 		arrowTimer = 0;
 		base.Start ();
@@ -72,15 +72,16 @@ public class ArrowTower : Tower
 
 	protected override void Upgrade ()
 	{
-		Debug.Log ("Clicked on Arrow");
 		if (gameState.GetGold () >= damage * damage * baseCost) {
 			gameState.ChangeGold (-1 * damage * damage);
 			damage = damage + 1;
-			rate = rate * .9f;
-			range = range * 1.1f;
-			Debug.Log ("Upgraded Arrow");
+			rate = rate - .01f;
+			if (rate < .5f) {
+				rate = .5f;
+			}
+
 		} else {
-			Debug.Log ("Not Enough gold, needed " + damage * damage);
+			Debug.Log ("Not Enough gold, needed " + damage * damage * baseCost);
 		}
 	}
 
