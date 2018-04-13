@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class GameState : MonoBehaviour
 {
 
-	private int gold;
+	private Gold gold;
 	public Text goldCount;
 	private int score;
 	public Text scoreCount;
@@ -32,7 +32,9 @@ public class GameState : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		gold = 10;
+        gold = new Gold();
+
+        gold.setAmount(10);
 		//validClick = new UnityEvent(); //This isnt needed because apparently UnityEvents are automatically created.
 		//This was activating AFTER the bonfire and BEFORE the arrow tower, so only the arrow tower was listening.
 		score = 0;
@@ -63,7 +65,7 @@ public class GameState : MonoBehaviour
 
 	private void UpdateText ()
 	{
-		goldCount.text = "Gold: " + gold.ToString ();
+		goldCount.text = "Gold: " + gold.getIntAmount().ToString ();
 		scoreCount.text = "Score: " + score.ToString ();
 		livesCount.text = "Lives: " + lives.ToString ();
 		waveCount.text = "Wave: " + wave.ToString ();
@@ -110,12 +112,12 @@ public class GameState : MonoBehaviour
 
 	public void ChangeGold (int change)
 	{
-		gold += change;
+		gold.addAmmount(change);
 	}
 
 	public int GetGold ()
 	{
-		return gold;
+		return gold.getIntAmount();
 	}
 
 	public void LoseLife ()
