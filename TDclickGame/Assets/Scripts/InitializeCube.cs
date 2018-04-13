@@ -4,8 +4,13 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
+
 public class InitializeCube : MonoBehaviour
 {
+    public enum dir {Up, Left, Down, Right, none }
+
+
+
 	public Material[] materials;
 
 	private GameState gameState;
@@ -135,19 +140,32 @@ public class InitializeCube : MonoBehaviour
 	{
 		GameObject tile;
 
-		bool foundTown;
+        bool foundTown;
 		bool foundForest;
 
+        bool answer = false;
+
+        List<GameObject> forests = new List<GameObject>();
+
 		if (map.GetTile (0, 0, out tile)) {
-			if (tile.GetComponent<InitializeCube> ().FullCheck (0, 0, map, out foundTown, out foundForest)) {
-				return foundTown && foundForest;
-			}
+			if (tile.GetComponent<InitializeCube> ().FullCheck (0, 0, map, out foundTown, out foundForest, forests)) {
+				answer = foundTown && foundForest;
+
+                foreach (GameObject x in forests)
+                {
+                    if (x.GetComponent<InitializeCube>().nextRoad == null)
+                    {
+                        answer = false;
+                        break;
+                    }
+                }
+            }
 		}
 
-		return false;
+		return answer;
 	}
 
-	protected bool FullCheck (int col, int row, CreateMap map, out bool foundTown, out bool foundForest)
+    protected bool FullCheck(int col, int row, CreateMap map, out bool foundTown, out bool foundForest, List<GameObject> forests)
 	{
 		GameObject tile;
 
@@ -161,29 +179,30 @@ public class InitializeCube : MonoBehaviour
 
 		if (type == CubeType.Forest) {
 			foundForest = true;
-		}
+            forests.Add(gameObject);
+        }
 		if (type == CubeType.Town) {
 			foundTown = true;
-			answer = RoadCheck (col, row, map);
+			answer = RoadCheck (col, row, map, gameObject, dir.none);
 		}
 
 		if (answer && map.GetTile (col + 1, row, out tile)) {
 			InitializeCube tileInst = tile.GetComponent<InitializeCube> ();
 
-			answer = tileInst.FullCheck (col + 1, row, map, out town, out forest);
+			answer = tileInst.FullCheck (col + 1, row, map, out town, out forest, forests);
 
 			if (town) {
 				foundTown = town;
 			}
 			if (forest) {
 				foundForest = forest;
-			}
+            }
 		}
 
 		if (answer && map.GetTile (col, row + 1, out tile)) {
 			InitializeCube tileInst = tile.GetComponent<InitializeCube> ();
 
-			answer = tileInst.FullUpCheck (col, row + 1, map, out town, out forest);
+			answer = tileInst.FullUpCheck (col, row + 1, map, out town, out forest, forests);
 
 			if (town) {
 				foundTown = town;
@@ -200,7 +219,7 @@ public class InitializeCube : MonoBehaviour
 		return answer;
 	}
 
-	protected bool FullUpCheck (int col, int row, CreateMap map, out bool foundTown, out bool foundForest)
+	protected bool FullUpCheck (int col, int row, CreateMap map, out bool foundTown, out bool foundForest, List<GameObject> forests)
 	{
 		GameObject tile;
 
@@ -214,23 +233,24 @@ public class InitializeCube : MonoBehaviour
 
 		if (type == CubeType.Forest) {
 			foundForest = true;
-		}
+            forests.Add(gameObject);
+        }
 		if (type == CubeType.Town) {
 			foundTown = true;
-			answer = RoadCheck (col, row, map);
+			answer = RoadCheck (col, row, map, gameObject, dir.none);
 		}
 
 		if (answer && map.GetTile (col, row + 1, out tile)) {
 			InitializeCube tileInst = tile.GetComponent<InitializeCube> ();
 
-			answer = tileInst.FullUpCheck (col, row + 1, map, out town, out forest);
+			answer = tileInst.FullUpCheck (col, row + 1, map, out town, out forest, forests);
 
 			if (town) {
 				foundTown = town;
 			}
 			if (forest) {
 				foundForest = forest;
-			}
+            }
 		}
 
 		if (!answer) {
@@ -240,307 +260,98 @@ public class InitializeCube : MonoBehaviour
 		return answer;
 	}
 
-	protected bool RoadCheck (int col, int row, CreateMap map)
+	protected bool RoadCheck (int col, int row, CreateMap map, GameObject GO, dir dirLast)
 	{
 		bool up = true;
 		bool down = true;
 		bool left = true;
 		bool right = true;
 
-		beenChecked = true;
+        bool answer = true;
 
-		GameObject tile;
+        if (beenChecked)
+        {
+            return true;
+        }
 
-		if (map.GetTile (col + 1, row, out tile)) {
-			InitializeCube tileInst = tile.GetComponent<InitializeCube> ();
-			right = tileInst.type != CubeType.Forest;
-			if (right && tileInst.type != CubeType.Town) {
-				right = tile.GetComponent<InitializeCube> ().RoadCheckRight (col + 1, row, map, gameObject);
-			}
-		}
-		if (map.GetTile (col - 1, row, out tile)) {
-			InitializeCube tileInst = tile.GetComponent<InitializeCube> ();
-			left = tileInst.type != CubeType.Forest;
-			if (left && tileInst.type != CubeType.Town) {
-				left = tile.GetComponent<InitializeCube> ().RoadCheckLeft (col - 1, row, map, gameObject);
-			}
-		}
-		if (map.GetTile (col, row - 1, out tile)) {
-			InitializeCube tileInst = tile.GetComponent<InitializeCube> ();
-			down = tileInst.type != CubeType.Forest;
-			if (down && tileInst.type != CubeType.Town) {
-				down = tile.GetComponent<InitializeCube> ().RoadCheckDown (col, row - 1, map, gameObject);
-			}
-		}
-		if (map.GetTile (col, row + 1, out tile)) {
-			InitializeCube tileInst = tile.GetComponent<InitializeCube> ();
-			up = tileInst.type != CubeType.Forest;
-			if (up && tileInst.type != CubeType.Town) {
-				up = tile.GetComponent<InitializeCube> ().RoadCheckUp (col, row + 1, map, gameObject);
-			}
-		}
+        beenChecked = true;
 
-		beenChecked = false;
+        GameObject tile;
 
-		if (!(up && down && left && right)) {
-			Debug.Log ("Broke in Road Check at " + col + ", " + row);
-		}
+        if (dirLast != dir.none && type == CubeType.Town)
+        {
+            answer = false;
+        }
+        else if (type == CubeType.Road || dirLast == dir.none)
+        {
+            nextRoad = GO;
 
-		return up && down && left && right;
-	}
+            if (map.GetTile(col, row + 1, out tile) && dirLast != dir.Down)
+            {
+                up = tile.GetComponent<InitializeCube>().RoadCheck(col, row + 1, map, gameObject, dir.Up);
+            }
+            if (map.GetTile(col, row - 1, out tile) && dirLast != dir.Up)
+            {
+                down = tile.GetComponent<InitializeCube>().RoadCheck(col, row - 1, map, gameObject, dir.Down);
+            }
+            if (map.GetTile(col - 1, row, out tile) && dirLast != dir.Right)
+            {
+                left = tile.GetComponent<InitializeCube>().RoadCheck(col - 1, row, map, gameObject, dir.Left);
+            }
+            if (map.GetTile(col + 1, row, out tile) && dirLast != dir.Left)
+            {
+                right = tile.GetComponent<InitializeCube>().RoadCheck(col + 1, row, map, gameObject, dir.Right);
+            }
 
-	protected bool RoadCheckLeft (int col, int row, CreateMap map, GameObject lastPath)
-	{
-		bool answer = true;
+            answer = up && down && left && right;
+        }
+        else if (type == CubeType.Forest)
+        {
+            nextRoad = GO;
 
-		if (beenChecked) {
-			return true;
-		}
-		beenChecked = true;
+            if (map.GetTile(col, row + 1, out tile) && dirLast != dir.Down)
+            {
+                up = tile.GetComponent<InitializeCube>().CheckYourself();
+                failtest(dir.Up, col, row, up);
+            }
+            if (map.GetTile(col, row - 1, out tile) && dirLast != dir.Up)
+            {
+                down = tile.GetComponent<InitializeCube>().CheckYourself();
+                failtest(dir.Down, col, row, down);
+            }
+            if (map.GetTile(col - 1, row, out tile) && dirLast != dir.Right)
+            {
+                left = tile.GetComponent<InitializeCube>().CheckYourself();
+                failtest(dir.Left, col, row, left);
+            }
+            if (map.GetTile(col + 1, row, out tile) && dirLast != dir.Left)
+            {
+                right = tile.GetComponent<InitializeCube>().CheckYourself();
+                failtest(dir.Right, col, row, right);
 
-		if (type == CubeType.Road) {
-			nextRoad = lastPath;
+            }
 
-			bool up = true;
-			bool down = true;
-			bool left = true;
+            answer = up && down && left && right;
 
-			GameObject tile;
+        }
 
-			if (map.GetTile (col, row + 1, out tile)) {
-				up = tile.GetComponent<InitializeCube> ().RoadCheckUp (col, row + 1, map, gameObject);
-			}
-			if (map.GetTile (col, row - 1, out tile)) {
-				down = tile.GetComponent<InitializeCube> ().RoadCheckDown (col, row - 1, map, gameObject);
-			}
-			if (map.GetTile (col - 1, row, out tile)) {
-				left = tile.GetComponent<InitializeCube> ().RoadCheckLeft (col - 1, row, map, gameObject);
-			}
+        if (!answer)
+        {
+            Debug.Log("Broke in Road Check at " + col + ", " + row);
+        }
 
-			answer = up && down && left;
-		} else if (type == CubeType.Forest) {
-			nextRoad = lastPath;
-
-			bool up = true;
-			bool down = true;
-			bool left = true;
-
-			GameObject tile;
-
-			if (map.GetTile (col, row + 1, out tile)) {
-				up = tile.GetComponent<InitializeCube> ().CheckYourself ();
-			}
-			if (map.GetTile (col, row - 1, out tile)) {
-				down = tile.GetComponent<InitializeCube> ().CheckYourself ();
-			}
-			if (map.GetTile (col - 1, row, out tile)) {
-				left = tile.GetComponent<InitializeCube> ().CheckYourself ();
-			}
-
-			answer = up && down && left;
-
-		} else if (type == CubeType.Town) {
-			answer = false;
-		}
-
-		if (!answer) {
-			Debug.Log ("Broke in Road Check Left at " + col + ", " + row);
-		}
-
-		beenChecked = false;
+        beenChecked = false;
 
 		return answer;
 	}
 
-	protected bool RoadCheckRight (int col, int row, CreateMap map, GameObject lastPath)
-	{
-		bool answer = true;
-
-		if (beenChecked) {
-			return true;
-		}
-		beenChecked = true;
-
-		if (type == CubeType.Road) {
-			nextRoad = lastPath;
-
-			bool up = true;
-			bool down = true;
-			bool right = true;
-
-			GameObject tile;
-
-			if (map.GetTile (col, row + 1, out tile)) {
-				up = tile.GetComponent<InitializeCube> ().RoadCheckUp (col, row + 1, map, gameObject);
-			}
-			if (map.GetTile (col, row - 1, out tile)) {
-				down = tile.GetComponent<InitializeCube> ().RoadCheckDown (col, row - 1, map, gameObject);
-			}
-			if (map.GetTile (col + 1, row, out tile)) {
-				right = tile.GetComponent<InitializeCube> ().RoadCheckRight (col + 1, row, map, gameObject);
-			}
-
-			answer = up && down && right;
-		} else if (type == CubeType.Forest) {
-			nextRoad = lastPath;
-
-			bool up = true;
-			bool down = true;
-			bool right = true;
-
-			GameObject tile;
-
-			if (map.GetTile (col, row + 1, out tile)) {
-				up = tile.GetComponent<InitializeCube> ().CheckYourself ();
-
-			}
-			if (map.GetTile (col, row - 1, out tile)) {
-				down = tile.GetComponent<InitializeCube> ().CheckYourself ();
-			}
-			if (map.GetTile (col + 1, row, out tile)) {
-				right = tile.GetComponent<InitializeCube> ().CheckYourself ();
-			}
-
-			answer = up && down && right;
-
-		} else if (type == CubeType.Town) {
-			answer = false;
-		}
-
-		if (!answer) {
-			Debug.Log ("Broke in Road Check Right at " + col + ", " + row);
-		}
-
-		beenChecked = false;
-
-		return answer;
-	}
-
-	protected bool RoadCheckUp (int col, int row, CreateMap map, GameObject lastPath)
-	{
-		bool answer = true;
-
-		if (beenChecked) {
-			return true;
-		}
-		beenChecked = true;
-
-		if (type == CubeType.Road) {
-			nextRoad = lastPath;
-
-			bool up = true;
-			bool right = true;
-			bool left = true;
-
-			GameObject tile;
-
-			if (map.GetTile (col, row + 1, out tile)) {
-				up = tile.GetComponent<InitializeCube> ().RoadCheckUp (col, row + 1, map, gameObject);
-			}
-			if (map.GetTile (col + 1, row, out tile)) {
-				right = tile.GetComponent<InitializeCube> ().RoadCheckRight (col + 1, row, map, gameObject);
-			}
-			if (map.GetTile (col - 1, row, out tile)) {
-				left = tile.GetComponent<InitializeCube> ().RoadCheckLeft (col - 1, row, map, gameObject);
-			}
-
-			answer = up && right && left;
-		} else if (type == CubeType.Forest) {
-			nextRoad = lastPath;
-
-			bool up = true;
-			bool right = true;
-			bool left = true;
-
-			GameObject tile;
-
-			if (map.GetTile (col, row + 1, out tile)) {
-				up = tile.GetComponent<InitializeCube> ().CheckYourself ();
-			}
-			if (map.GetTile (col + 1, row, out tile)) {
-				right = tile.GetComponent<InitializeCube> ().CheckYourself ();
-			}
-			if (map.GetTile (col - 1, row, out tile)) {
-				left = tile.GetComponent<InitializeCube> ().CheckYourself ();
-			}
-
-			answer = up && right && left;
-
-		} else if (type == CubeType.Town) {
-			answer = false;
-		}
-
-		if (!answer) {
-			Debug.Log ("Broke in Road Check Up at " + col + ", " + row);
-		}
-
-		beenChecked = false;
-
-		return answer;
-	}
-
-	protected bool RoadCheckDown (int col, int row, CreateMap map, GameObject lastPath)
-	{
-		bool answer = true;
-
-		if (beenChecked) {
-			return true;
-		}
-		beenChecked = true;
-
-		if (type == CubeType.Road) {
-			nextRoad = lastPath;
-
-			bool right = true;
-			bool down = true;
-			bool left = true;
-
-			GameObject tile;
-
-			if (map.GetTile (col + 1, row, out tile)) {
-				right = tile.GetComponent<InitializeCube> ().RoadCheckUp (col + 1, row, map, gameObject);
-			}
-			if (map.GetTile (col, row - 1, out tile)) {
-				down = tile.GetComponent<InitializeCube> ().RoadCheckDown (col, row - 1, map, gameObject);
-			}
-			if (map.GetTile (col - 1, row, out tile)) {
-				left = tile.GetComponent<InitializeCube> ().RoadCheckLeft (col - 1, row, map, gameObject);
-			}
-
-			answer = right && down && left;
-		} else if (type == CubeType.Forest) {
-			nextRoad = lastPath;
-
-			bool right = true;
-			bool down = true;
-			bool left = true;
-
-			GameObject tile;
-
-			if (map.GetTile (col + 1, row, out tile)) {
-				right = tile.GetComponent<InitializeCube> ().CheckYourself ();
-			}
-			if (map.GetTile (col, row - 1, out tile)) {
-				down = tile.GetComponent<InitializeCube> ().CheckYourself ();
-			}
-			if (map.GetTile (col - 1, row, out tile)) {
-				left = tile.GetComponent<InitializeCube> ().CheckYourself ();
-			}
-
-			answer = right && down && left;
-
-		} else if (type == CubeType.Town) {
-			answer = false;
-		}
-
-		if (!answer) {
-			Debug.Log ("Broke in Road Check Down at " + col + ", " + row);
-		}
-
-		beenChecked = false;
-
-		return answer;
-	}
+    private void failtest(dir blockFailedOn, int col, int row, bool failed)
+    {
+        if (!failed)
+        {
+            Debug.Log("forest at " + col + ", " + row + " had issues with " + blockFailedOn.ToString());
+        }
+    }
 
 	protected bool CheckYourself ()
 	{

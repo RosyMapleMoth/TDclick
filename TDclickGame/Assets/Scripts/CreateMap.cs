@@ -20,13 +20,7 @@ public class CreateMap : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		setupMenu (5);
-
-		towerbuttons [0].gameObject.GetComponentInChildren<Text> ().text = "Tower Block";
-		towerbuttons [1].gameObject.GetComponentInChildren<Text> ().text = "Town Block";
-		towerbuttons [2].gameObject.GetComponentInChildren<Text> ().text = "Road Block";
-		towerbuttons [3].gameObject.GetComponentInChildren<Text> ().text = "Forest Block";
-		towerbuttons [4].gameObject.GetComponentInChildren<Text> ().text = "Exit Menu";
+        setupBlockButtons();
 
 		gameState.startButton.onClick.AddListener (MapCreated);
 
@@ -48,7 +42,7 @@ public class CreateMap : MonoBehaviour
 		GameObject temp;
 		for (int c = 0; c < MAPSIZE; c++) {
 			for (int r = 0; r < MAPSIZE; r++) {
-				temp = Instantiate (initTile, new Vector3 (r, 0f, c), Quaternion.identity, transform);
+				temp = Instantiate (initTile, new Vector3 (c, 0f, r), Quaternion.identity, transform);
 				temp.GetComponent<InitializeCube> ().cubeSelectionButtons = towerbuttons;
 				temp.GetComponent<InitializeCube> ().cubeCreationMenu = menu;
 
@@ -60,7 +54,6 @@ public class CreateMap : MonoBehaviour
 	private void MapCreated ()
 	{
 		if (InitializeCube.TryForRoad (this)) {
-			gameState.startButton.onClick.RemoveListener (MapCreated);
 			setupMenu (3);
 
 			towerbuttons [0].gameObject.GetComponentInChildren<Text> ().text = "Bonfire Tower";
@@ -70,10 +63,19 @@ public class CreateMap : MonoBehaviour
 			GameObject[] blocks = GameObject.FindGameObjectsWithTag ("Initialize Cube");
 
 			foreach (GameObject thisBlock in blocks) {
-				thisBlock.GetComponent<InitializeCube> ().InitMap ();
+                try
+                {
+                    thisBlock.GetComponent<InitializeCube>().InitMap();
+                }
+                catch
+                {
+                    setupBlockButtons();
+                }
 			}
 
-			gameState.boardMade.Invoke ();
+            gameState.startButton.onClick.RemoveListener(MapCreated);
+
+            gameState.boardMade.Invoke ();
 			gameState.MapDone ();
 		} else {
 			Debug.Log ("Invalid Road");
@@ -98,6 +100,17 @@ public class CreateMap : MonoBehaviour
 
 		menu.gameObject.SetActive (false);
 	}
+
+    private void setupBlockButtons()
+    {
+        setupMenu(5);
+
+        towerbuttons[0].gameObject.GetComponentInChildren<Text>().text = "Tower Block";
+        towerbuttons[1].gameObject.GetComponentInChildren<Text>().text = "Town Block";
+        towerbuttons[2].gameObject.GetComponentInChildren<Text>().text = "Road Block";
+        towerbuttons[3].gameObject.GetComponentInChildren<Text>().text = "Forest Block";
+        towerbuttons[4].gameObject.GetComponentInChildren<Text>().text = "Exit Menu";
+    }
 
 	public bool GetTile (int column, int row, out GameObject tile)
 	{
