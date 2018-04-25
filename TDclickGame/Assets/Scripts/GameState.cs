@@ -34,7 +34,7 @@ public class GameState : MonoBehaviour
 	{
         gold = new Gold();
 
-        gold.setAmount(10);
+        gold.setAmount(100);
 		//validClick = new UnityEvent(); //This isnt needed because apparently UnityEvents are automatically created.
 		//This was activating AFTER the bonfire and BEFORE the arrow tower, so only the arrow tower was listening.
 		score = 0;

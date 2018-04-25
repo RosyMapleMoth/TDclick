@@ -54,13 +54,14 @@ public class CreateMap : MonoBehaviour
 	private void MapCreated ()
 	{
 		if (InitializeCube.TryForRoad (this)) {
-			setupMenu (3);
+			setupMenu (4);
 
 			towerbuttons [0].gameObject.GetComponentInChildren<Text> ().text = "Bonfire Tower";
 			towerbuttons [1].gameObject.GetComponentInChildren<Text> ().text = "Arrow Tower";
-			towerbuttons [2].gameObject.GetComponentInChildren<Text> ().text = "Exit Menu";
+			towerbuttons [2].gameObject.GetComponentInChildren<Text> ().text = "Bomb Tower";
+            towerbuttons [3].gameObject.GetComponentInChildren<Text> ().text = "Exit Menu";
 
-			GameObject[] blocks = GameObject.FindGameObjectsWithTag ("Initialize Cube");
+            GameObject[] blocks = GameObject.FindGameObjectsWithTag ("Initialize Cube");
 
 			foreach (GameObject thisBlock in blocks) {
                 try

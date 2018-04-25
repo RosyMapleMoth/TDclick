@@ -74,7 +74,8 @@ public class CreateTower : MonoBehaviour
 		towerCreationMenu.gameObject.SetActive(true);
         towerSelectionButtons[0].onClick.AddListener(() => MakeTower(Towers[0]));
         towerSelectionButtons[1].onClick.AddListener(() => MakeTower(Towers[1]));
-        towerSelectionButtons[2].onClick.AddListener(CloseMenu);
+        towerSelectionButtons[2].onClick.AddListener(() => MakeTower(Towers[2]));
+        towerSelectionButtons[3].onClick.AddListener(CloseMenu);
 
         Debug.Log("openeing menu");
 
@@ -87,6 +88,7 @@ public class CreateTower : MonoBehaviour
 		towerSelectionButtons [0].onClick.RemoveAllListeners();
 		towerSelectionButtons [1].onClick.RemoveAllListeners();
         towerSelectionButtons [2].onClick.RemoveAllListeners();
+        towerSelectionButtons [3].onClick.RemoveAllListeners();
         Debug.Log("closing menu");
 	}
 
