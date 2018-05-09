@@ -83,7 +83,7 @@ public class GameState : MonoBehaviour
 				mouseStats.text = "Damage: " + tower.GetDamage () +
 				".\nFire Rate: " + tower.GetRate ().ToString () +
 				".\nDPS: " + dps.ToString () +
-				".\n\nNext Upgrade: " + tower.GetDamage () * tower.GetDamage () * tower.GetBaseCost () + " gold.";
+				".\n\nNext Upgrade: " + tower.GetUpgradeCost () + " gold.";
 			} else if (objectHovered.CompareTag ("Start")) {
 				mouseStats.text = "Monster Forest.";
 			} else if (objectHovered.CompareTag ("End")) {
@@ -98,7 +98,7 @@ public class GameState : MonoBehaviour
 					mouseStats.text = "Damage: " + tower.GetDamage () +
 					".\nFire Rate: " + tower.GetRate ().ToString () +
 					".\nDPS: " + dps.ToString () +
-					".\n\nNext Upgrade: " + tower.GetDamage () * tower.GetDamage () * tower.GetBaseCost () + " gold.";
+					".\n\nNext Upgrade: " + tower.GetUpgradeCost () + " gold.";
 				} else {
 					mouseStats.text = "Open Field.";
 				}

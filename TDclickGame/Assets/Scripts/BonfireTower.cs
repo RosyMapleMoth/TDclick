@@ -9,6 +9,7 @@ public class BonfireTower : Tower
 	private int damage;
 	private int baseCost = 10;
 	private float bonfireTimer;
+    private Color thisColor;
 
 	protected override void Start ()
 	{
@@ -16,7 +17,8 @@ public class BonfireTower : Tower
 		rate = 2f;
 		damage = 1;
 		bonfireTimer = 0f;
-		base.Start ();
+        thisColor = base.RangeObject.GetComponent<MeshRenderer>().sharedMaterial.color;
+        base.Start ();
 	}
 
 	protected override void Update ()
@@ -25,15 +27,14 @@ public class BonfireTower : Tower
 
 			MeshRenderer mesh = base.RangeObject.GetComponent<MeshRenderer> ();
 
-			Color color = Color.Lerp (Color.blue, Color.red, bonfireTimer);
+			Color color = Color.Lerp (thisColor, Color.red, bonfireTimer);
 			color.a = .3f;
 			mesh.material.color = color;
 
-			bonfireTimer -= Time.deltaTime * 5f;
+			bonfireTimer -= Time.deltaTime * 3f;
 
 			if (bonfireTimer < 0) {
-				color = Color.blue;
-				color.a = .3f;
+				color = thisColor;
 				mesh.material.color = color;
 
 				bonfireTimer = 0;
@@ -88,5 +89,10 @@ public class BonfireTower : Tower
 	{
 		return baseCost;
 	}
+
+    public override int GetUpgradeCost()
+    {
+        return damage * damage * baseCost;
+    }
 }
 

@@ -8,9 +8,11 @@ public class BombTower : Tower {
     private float rangeFloor;
     private float rate;
     private int damage;
+    private int level;
     private int baseCost = 20;
     private float bombRange;
     public GameObject bomBomb;
+    private bool fireWhenReady;
 
 
     // Use this for initialization
@@ -21,7 +23,9 @@ public class BombTower : Tower {
         rate = 5f;
         bombRange = 1f;
         damage = 5;
+        level = 1;
         gameState = GameObject.FindObjectOfType<GameState>();
+        fireWhenReady = false;
 
         base.Start();
 	}
@@ -30,28 +34,44 @@ public class BombTower : Tower {
     protected override void Update ()
     {
         base.Update();
+        if (fireWhenReady)
+        {
+            if (DealActualDamage())
+            {
+                base.SetTimerZero();
+                fireWhenReady = false;
+            }
+        }
 	}
 
 
     protected override void Upgrade()
     {
-        gameState.ChangeGold(-1 * damage * damage * baseCost);
-        rate -= .01f;
-        if (rate < 3f)
+        if (gameState.GetGold() >= level * level * baseCost)
         {
-            rate = 3f;
+            gameState.ChangeGold(-1 * level * level * baseCost);
+            rate -= .01f;
+            if (rate < 3f)
+            {
+                rate = 3f;
+            }
+            bombRange += .01f;
+            if (bombRange > 1.5f)
+            {
+                bombRange = 1.5f;
+            }
+            damage = damage + 5;
+            level += 1;
         }
-        bombRange += .01f;
-        if (bombRange > 1.5f)
-        {
-            bombRange = 1.5f;
-        }
-        damage = damage + 5;
     }
 
     protected override void DealDamage()
     {
+        fireWhenReady = true;
+    }
 
+    private bool DealActualDamage()
+    {
         float leaderHealth = 0;
         GameObject leader = null;
 
@@ -77,6 +97,11 @@ public class BombTower : Tower {
             BS.target = leader;
             BS.explosionRange = bombRange;
             BS.damage = damage;
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -100,6 +125,9 @@ public class BombTower : Tower {
         return baseCost;
     }
 
-
+    public override int GetUpgradeCost()
+    {
+        return level * level * baseCost;
+    }
 
 }

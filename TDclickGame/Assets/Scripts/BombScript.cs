@@ -7,13 +7,18 @@ public class BombScript : MonoBehaviour {
     public float explosionRange;
     public GameObject target;
     private float timer;
+    private float rangeTimer;
     private Vector3 start;
     private Vector3 end;
     public GameObject range;
     private bool fuseLit;
-    private List<GameObject> enemiesInRange;
+    public List<GameObject> enemiesInRange;
     public int damage;
+    private bool WaitForMe = false;
 
+    delegate void UpdateFunction();
+
+    private UpdateFunction updateFunction;
 
     // Use this for initialization
     void Start () {
@@ -21,11 +26,18 @@ public class BombScript : MonoBehaviour {
         timer = 0f;
         end = target.transform.position;
         start = transform.position;
+        rangeTimer = 0f;
+        updateFunction = CheckIfLit;
         enemiesInRange = new List<GameObject>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        updateFunction();
+	}
+
+    private void CheckIfLit()
+    {
         if (!fuseLit)
         {
             transform.position = Vector3.Lerp(start, end, timer);
@@ -34,31 +46,77 @@ public class BombScript : MonoBehaviour {
             if (Mathf.Abs(Vector3.Distance(transform.position, end)) <= .2f)
             {
                 LightFuse();
+                updateFunction = WaitUpdate;
             }
         }
-        else
+    }
+
+    private void WaitUpdate()
+    {
+        updateFunction = ExplodeUpdate;
+    }
+
+    private void ExplodeUpdate()
+    {
+        Explode();
+
+        gameObject.GetComponentInChildren<MeshRenderer>().material.color = Color.clear;
+
+        updateFunction = AftermathUpdate;
+    }
+
+    private void AftermathUpdate()
+    {
+        if (rangeTimer > 0)
         {
-            Explode();
+
+            MeshRenderer mesh = range.GetComponent<MeshRenderer>();
+
+            Color color = Color.Lerp(Color.clear, Color.red, rangeTimer);
+            color.a = .3f;
+            mesh.material.color = color;
+
+            rangeTimer -= Time.deltaTime;
+
+            if (rangeTimer < 0)
+            {
+                color = Color.clear;
+                color.a = .3f;
+                mesh.material.color = color;
+
+                rangeTimer = 0f;
+
+                GameObject.Destroy(range);
+                GameObject.Destroy(gameObject);
+            }
         }
-	}
+    }
 
     private void Explode()
     {
         foreach (GameObject enemy in enemiesInRange)
         {
-            MonsterAI monster = enemy.GetComponentInParent<MonsterAI>();
+            if (enemy != null)
+            {
+                MonsterAI monster = enemy.GetComponentInParent<MonsterAI>();
 
-            float enemyDistance = Vector3.Distance(transform.position, enemy.transform.position);
-            enemyDistance -= explosionRange;
-            enemyDistance /= explosionRange;
+                float enemyDistance = Vector3.Distance(transform.position, enemy.transform.position);
+                enemyDistance -= explosionRange;
+                enemyDistance /= explosionRange;
 
-            int enemyDamage = (int)Mathf.Ceil(enemyDistance * (float)damage);
+                int enemyDamage = (int)Mathf.Ceil(enemyDistance * (float)damage);
 
 
-            monster.ChangeHealth(enemyDamage);
+                if (enemyDistance > 0)
+                {
+                    enemyDamage = 0;
+                }
+
+                monster.ChangeHealth(enemyDamage);
+            }
         }
 
-        GameObject.Destroy(gameObject);
+        rangeTimer = 1f;
     }
 
     private void LightFuse()
@@ -66,7 +124,6 @@ public class BombScript : MonoBehaviour {
         fuseLit = true;
 
         range = Instantiate(this.range);
-        range.transform.parent = transform;
         range.transform.SetPositionAndRotation(new Vector3(0, -.1f, 0) + gameObject.transform.position, Quaternion.identity);
 
         TowerRange towerRange = range.GetComponent<TowerRange>();

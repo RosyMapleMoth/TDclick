@@ -104,4 +104,9 @@ public class ArrowTower : Tower
 	{
 		return baseCost;
 	}
+
+    public override int GetUpgradeCost()
+    {
+        return damage * damage * baseCost;
+    }
 }
