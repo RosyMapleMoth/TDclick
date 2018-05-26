@@ -117,9 +117,9 @@ public class MonsterAI : MonoBehaviour
 		return distance;
 	}
 
-    public void ChangeSpeed(float newSpeed)
+    public void MultiplySpeed(float newSpeed)
     {
-        speed = newSpeed;
+        speed = newSpeed * speed;
     }
 
     public void ResetSpeed()

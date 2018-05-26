@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 8
+  serializedVersion: 9
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -39,6 +39,7 @@ RenderSettings:
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
   m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -54,11 +55,10 @@ LightmapSettings:
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
-    serializedVersion: 9
+    serializedVersion: 10
     m_Resolution: 2
     m_BakeResolution: 40
-    m_TextureWidth: 1024
-    m_TextureHeight: 1024
+    m_AtlasSize: 1024
     m_AO: 0
     m_AOMaxDistance: 1
     m_CompAOExponent: 1
@@ -1798,6 +1798,7 @@ MonoBehaviour:
   - {fileID: 1930387944217018, guid: 1c29fb17dd7ed1e4e8d3094d7e94874e, type: 2}
   - {fileID: 1940722932232900, guid: 1f2d5c503a4a10f44a23930c1c98b26e, type: 2}
   - {fileID: 1685362083488822, guid: 4b59b607ad263ab46afe24e4fa97d168, type: 2}
+  - {fileID: 1569883061390568, guid: 046c25246380cf546b6bdcebdbb3bfec, type: 2}
 --- !u!4 &1969039496
 Transform:
   m_ObjectHideFlags: 0
