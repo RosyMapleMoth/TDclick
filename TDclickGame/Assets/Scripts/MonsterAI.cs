@@ -7,7 +7,7 @@ public class MonsterAI : MonoBehaviour
 {
 
 	public int Health;
-	private int Speed;
+	private float speed;
 	private GameObject nextPath;
 	public GameObject startPath;
 	public Material damageMat;
@@ -28,7 +28,7 @@ public class MonsterAI : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		Speed = 1;
+		speed = 1f;
 		if (startPath == null) {
 			startPath = GameObject.FindGameObjectWithTag ("Start");
 		}
@@ -46,7 +46,7 @@ public class MonsterAI : MonoBehaviour
 		if (Health > 0) {
 			Vector3 direction = nextPath.transform.position - this.transform.position;
 
-			float movementThisFrame = Speed * Time.deltaTime;
+			float movementThisFrame = speed * Time.deltaTime;
 			distance += movementThisFrame;
 
 			if (direction.magnitude <= movementThisFrame) {
@@ -60,7 +60,7 @@ public class MonsterAI : MonoBehaviour
 			} else {
 				transform.Translate (direction.normalized * movementThisFrame, Space.World);
 				Quaternion targetRotation = Quaternion.LookRotation (direction);
-				this.transform.rotation = Quaternion.Lerp (this.transform.rotation, targetRotation, Time.deltaTime * Speed);
+				this.transform.rotation = Quaternion.Lerp (this.transform.rotation, targetRotation, Time.deltaTime * speed);
 			}
 		}
 
@@ -116,4 +116,14 @@ public class MonsterAI : MonoBehaviour
 	{
 		return distance;
 	}
+
+    public void ChangeSpeed(float newSpeed)
+    {
+        speed = newSpeed;
+    }
+
+    public void ResetSpeed()
+    {
+        speed = 1f;
+    }
 }
