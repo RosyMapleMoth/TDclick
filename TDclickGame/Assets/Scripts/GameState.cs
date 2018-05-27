@@ -7,11 +7,15 @@ using UnityEngine.Events;
 public class GameState : MonoBehaviour
 {
 
+	public Canvas[] huds;
+	public Camera[] Cameras;
 	private Gold gold;
 	public Text goldCount;
+	public Text clickerGoldCount;
 	private int score;
 	public Text scoreCount;
 	private int lives;
+	private int maxLives;
 	public Text livesCount;
 	public GameObject objectClicked;
 	public GameObject objectHovered;
@@ -23,6 +27,8 @@ public class GameState : MonoBehaviour
 	public Button startButton;
 	private bool boardInitialized;
 	private bool finishedWave;
+
+	private bool waveFailed;
 
 	private List<GameObject> activeEnemies;
 	private int wave;
@@ -38,8 +44,10 @@ public class GameState : MonoBehaviour
 		//validClick = new UnityEvent(); //This isnt needed because apparently UnityEvents are automatically created.
 		//This was activating AFTER the bonfire and BEFORE the arrow tower, so only the arrow tower was listening.
 		score = 0;
-		lives = 10;
+		lives = 1;
+		maxLives = 1;
 		wave = 0;
+		waveFailed = false;
 
 		boardInitialized = false;
 
@@ -66,12 +74,18 @@ public class GameState : MonoBehaviour
 	private void UpdateText ()
 	{
 		goldCount.text = "Gold: " + gold.getIntAmount().ToString ();
+		clickerGoldCount.text = "Gold: " + gold.getIntAmount().ToString ();
 		scoreCount.text = "Score: " + score.ToString ();
 		livesCount.text = "Lives: " + lives.ToString ();
 		waveCount.text = "Wave: " + wave.ToString ();
 
 		if (lives < 1) {
-			gameOver.text = "Game Over!\nYour Score: " + score.ToString ();
+			gameOver.text = "Wave Failed!\nResetting Wave. ";
+			waveFailed = true;
+		}
+		else
+		{
+			gameOver.text = "";
 		}
 
 		if (objectHovered != null) {
@@ -137,7 +151,15 @@ public class GameState : MonoBehaviour
 
 	public void IncrementWave ()
 	{
+		if (!waveFailed)
+		{
 		wave += 1;
+		}
+		else if (waveFailed)
+		{
+			waveFailed = false;
+		}
+		lives = maxLives;
 		activeEnemies = new List<GameObject> ();
 		finishedWave = false;
 		newWave.Invoke ();

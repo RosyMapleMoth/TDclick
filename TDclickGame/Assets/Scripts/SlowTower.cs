@@ -59,7 +59,24 @@ public class SlowTower : Tower {
         {
             base.gameState.ChangeGold(-1 * GetUpgradeCost());
             range += .1f;
+
+            foreach(GameObject enemy in base.GetEnemies())
+            {
+                if (enemy != null)
+                {
+                    EnemyLeft(enemy);
+                }
+            }
+
             level += 1;
+
+            foreach(GameObject enemy in base.GetEnemies())
+            {
+                if (enemy != null)
+                {
+                DetectedEnemy(enemy);
+                }
+            }
         }
     }
 
@@ -70,11 +87,11 @@ public class SlowTower : Tower {
 
     private void DetectedEnemy(GameObject enemy)
     {
-        enemy.GetComponentInParent<MonsterAI>().MultiplySpeed(.5f);
+        enemy.GetComponentInParent<MonsterAI>().MultiplySpeed(1f - (.09f + .01f * level));
     }
 
     private void EnemyLeft(GameObject enemy)
     {
-        enemy.GetComponentInParent<MonsterAI>().MultiplySpeed(2f);
+        enemy.GetComponentInParent<MonsterAI>().MultiplySpeed(1 / (1f - (.09f + .01f * level)));
     }
 }

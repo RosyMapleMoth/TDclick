@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33128546567992820}
   - component: {fileID: 65357923424021758}
   - component: {fileID: 23780052908859456}
+  - component: {fileID: 114614361108984072}
   - component: {fileID: 114333634139670326}
   m_Layer: 0
   m_Name: City Cube
@@ -56,6 +57,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: f10415fcdf246bb459a148c23466c582, type: 2}
   m_StaticBatchInfo:
@@ -108,3 +110,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextPath: {fileID: 0}
+--- !u!114 &114614361108984072
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1573972041057746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df0476a51313dc643a1c8cfc83f0dc41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameState: {fileID: 0}
+  mouseController: {fileID: 0}

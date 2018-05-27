@@ -116,9 +116,12 @@ public class InitializeCube : MonoBehaviour
 			} else {
 				throw new System.Exception ("Tried to initialize invalid road");
 			}
-		} else if (type == CubeType.Town) {
+		} else if (type == CubeType.Town) 
+		{
 			gameObject.tag = "End";
-		} else if (type == CubeType.Tower) {
+		} 
+		else if (type == CubeType.Tower) 
+		{
 			CreateTower tower = gameObject.AddComponent<CreateTower> ();
 			CreateMap map = GameObject.FindObjectOfType<CreateMap> ();
 			tower.Towers = map.towers;
