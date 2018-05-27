@@ -22,7 +22,7 @@ public class MouseController : MonoBehaviour
 		//Listen for initialization call
 		gameState.boardMade.AddListener (InitializeButtonsStart);
 		//Set the current update function.
-		updateFunction = NormalUpdate;
+		updateFunction = TowerDefenseUpdate;
 	}
 
 	// Update is called once per frame
@@ -30,14 +30,15 @@ public class MouseController : MonoBehaviour
 	{
 		//Make sure updateFunction is set to something
 		if (updateFunction == null) {
-			updateFunction = NormalUpdate;
+			updateFunction = TowerDefenseUpdate;
 		}
 
 		//Call the update
 		updateFunction ();
 	}
 
-	private void NormalUpdate ()
+    //What needs to be updated while in Tower Defense
+	private void TowerDefenseUpdate ()
 	{
 		//Cast a ray to fin out what the mouse is on
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
@@ -95,24 +96,32 @@ public class MouseController : MonoBehaviour
 		updateFunction = ClickUpdate;
 	}
 
+    //Move from Clicker to TD
 	public void ChangeToTD()
 	{
+        //deactivate clicker hud
 		gameState.huds[1].gameObject.SetActive(false);
+        //activate TD hud
 		gameState.huds[0].gameObject.SetActive(true);
+        //deactivate clicker camera
 		gameState.Cameras[1].gameObject.SetActive(false);
+        //activate TD camera
 		gameState.Cameras[0].gameObject.SetActive(true);
 
-		updateFunction = NormalUpdate;
+        //Set update function to TowerDefenseUpdate
+		updateFunction = TowerDefenseUpdate;
 	}
 
+    //what needs to be updated while in Clicker
 	private void ClickUpdate()
 	{
 
 	}
 
+    //Used for eating one frame of inputs
 	private void NoUpdate ()
 	{
-		updateFunction = NormalUpdate;
+		updateFunction = TowerDefenseUpdate;
 	}
 
 
@@ -124,6 +133,10 @@ public class MouseController : MonoBehaviour
 		}
 	}
 
+    /// <summary>
+    /// This function runs when the boardMade unity event is invoked for the first time by CreateMap,
+    /// after the initialization blocks have been created. 
+    /// </summary>
 	private void InitializeButtonsStart ()
 	{
 		GameObject[] blocks = GameObject.FindGameObjectsWithTag ("Initialize Cube");
