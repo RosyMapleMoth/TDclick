@@ -17,23 +17,26 @@ public class GameState : MonoBehaviour
 	private int lives;
 	private int maxLives;
 	public Text livesCount;
+    private int wave;
+	public Text waveCount;
+	public Text mouseStats;
+    public Text gameOver;
+    public Button startButton;
 	public GameObject objectClicked;
 	public GameObject objectHovered;
 	public UnityEvent validClick;
 	public UnityEvent newWave;
 	public UnityEvent waveOver;
 	public UnityEvent boardMade;
-	public Text gameOver;
-	public Button startButton;
+	
+	
 	private bool boardInitialized;
 	private bool finishedWave;
 
 	private bool waveFailed;
 
 	private List<GameObject> activeEnemies;
-	private int wave;
-	public Text waveCount;
-	public Text mouseStats;
+
 
 	// Use this for initialization
 	void Start ()

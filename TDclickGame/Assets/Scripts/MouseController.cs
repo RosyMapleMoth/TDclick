@@ -135,26 +135,36 @@ public class MouseController : MonoBehaviour
 
     /// <summary>
     /// This function runs when the boardMade unity event is invoked for the first time by CreateMap,
-    /// after the initialization blocks have been created. 
+    /// after the initialization blocks have been created as the game first starts. 
     /// </summary>
 	private void InitializeButtonsStart ()
 	{
+        //gets an array of the blocks in the game
 		GameObject[] blocks = GameObject.FindGameObjectsWithTag ("Initialize Cube");
-
+        
+        //for each block, add listeners to the close and openMenu unity events.
 		foreach (GameObject thisBlock in blocks) {
 			thisBlock.GetComponent<InitializeCube> ().closeMenu.AddListener (closeMenu);
 
 			thisBlock.GetComponent<InitializeCube> ().openMenu.AddListener (openMenu);
 		}
 
+        //removes this function from the listeners of boardMade, and adds its sister function in its place, InitializeButtons()
 		gameState.boardMade.RemoveListener (InitializeButtonsStart);
 		gameState.boardMade.AddListener (InitializeButtons);
 	}
 
+
+    /// <summary>
+    /// This function runs once the board has been set up, with a legal path from a forest to a town,
+    /// and the player presses the initialize board button.
+    /// </summary>
 	private void InitializeButtons ()
 	{
+        //get all towerBase blocks
 		GameObject[] blocks = GameObject.FindGameObjectsWithTag ("TowerBase");
 
+        //And add listeners to their unity events.
 		foreach (GameObject thisBlock in blocks) {
 			thisBlock.GetComponent<CreateTower> ().closeMenu.AddListener (closeMenu);
 
@@ -162,6 +172,10 @@ public class MouseController : MonoBehaviour
 		}
 	}
 
+    /// <summary>
+    /// Seaney: what does this do and how does it work?
+    /// Also can it be simplified?
+    /// </summary>
 	public void openMenu ()
 	{
 		buildMenu = true;

@@ -383,7 +383,7 @@ RectTransform:
   - {fileID: 834339171}
   - {fileID: 1948542253}
   m_Father: {fileID: 1711924683}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -541,6 +541,10 @@ MonoBehaviour:
   clickerGoldCount: {fileID: 834339172}
   scoreCount: {fileID: 1050337383}
   livesCount: {fileID: 579811750}
+  waveCount: {fileID: 7519692}
+  mouseStats: {fileID: 914359411}
+  gameOver: {fileID: 921147940}
+  startButton: {fileID: 1185633366}
   objectClicked: {fileID: 0}
   objectHovered: {fileID: 0}
   validClick:
@@ -563,10 +567,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  gameOver: {fileID: 921147940}
-  startButton: {fileID: 1185633366}
-  waveCount: {fileID: 7519692}
-  mouseStats: {fileID: 914359411}
 --- !u!4 &367689394
 Transform:
   m_ObjectHideFlags: 0
@@ -765,7 +765,7 @@ RectTransform:
   - {fileID: 1185633363}
   - {fileID: 914359413}
   m_Father: {fileID: 1711924683}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -902,7 +902,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Lives
 --- !u!1 &617893673
 GameObject:
   m_ObjectHideFlags: 0
@@ -1187,7 +1187,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Gold
 --- !u!1 &834339170
 GameObject:
   m_ObjectHideFlags: 0
@@ -1993,11 +1993,11 @@ MonoBehaviour:
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
-    m_RichText: 0
+    m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Score
 --- !u!1 &1185633362
 GameObject:
   m_ObjectHideFlags: 0
@@ -2372,8 +2372,8 @@ RectTransform:
   m_Children:
   - {fileID: 897638680}
   - {fileID: 617893674}
-  - {fileID: 106953994}
   - {fileID: 565129051}
+  - {fileID: 106953994}
   m_Father: {fileID: 367689394}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
