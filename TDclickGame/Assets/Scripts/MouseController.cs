@@ -173,8 +173,11 @@ public class MouseController : MonoBehaviour
 	}
 
     /// <summary>
-    /// Seaney: what does this do and how does it work?
-    /// Also can it be simplified?
+    /// Q : what does this do and how does it work?
+    /// A : all it dose is set buildmenu to true; 
+	///     However the program uses the bool to insure that you can't click on tiles(opening new menus) while the menu is open.
+	/// Q : Also can it be simplified?
+	/// A : Probably not in our current system.
     /// </summary>
 	public void openMenu ()
 	{
