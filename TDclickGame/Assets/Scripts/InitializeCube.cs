@@ -15,10 +15,8 @@ public class InitializeCube : MonoBehaviour
 
 	private GameState gameState;
 
-	public UnityEvent openMenu;
-	public UnityEvent closeMenu;
 
-	public Canvas cubeCreationMenu;
+	public Menu menu;
 	public Button[] cubeSelectionButtons;
 
 	private GameObject nextRoad;
@@ -42,9 +40,9 @@ public class InitializeCube : MonoBehaviour
 	void Start ()
 	{
 		gameState = GameObject.FindObjectOfType<GameState> ();
-		MakeBlock (CubeType.Tower);
 		gameState.validClick.AddListener (ClickedOn);
 		type = CubeType.Tower;
+		this.gameObject.GetComponent<MeshRenderer> ().material = materials [(int)type];
 	}
 
 	// Update is called once per frame
@@ -56,36 +54,34 @@ public class InitializeCube : MonoBehaviour
 	private void ClickedOn ()
 	{
 		if (gameState.objectClicked == gameObject) {
-			OpenBlocks ();
+			menu.AddBlockListeners(MakeBlock);
 		}
 	}
 
-	private void OpenBlocks ()
-	{
-		openMenu.Invoke ();
-		cubeCreationMenu.gameObject.SetActive (true);
+	// private void OpenBlocks ()
+	// {
+	// 	menu.gameObject.SetActive (true);
 
-		cubeSelectionButtons [0].onClick.AddListener (() => MakeBlock (CubeType.Tower));
-		cubeSelectionButtons [1].onClick.AddListener (() => MakeBlock (CubeType.Town));
-		cubeSelectionButtons [2].onClick.AddListener (() => MakeBlock (CubeType.Road));
-		cubeSelectionButtons [3].onClick.AddListener (() => MakeBlock (CubeType.Forest));
-		cubeSelectionButtons [4].onClick.AddListener (CloseBlocks);
+	// 	cubeSelectionButtons [0].onClick.AddListener (() => MakeBlock (CubeType.Tower));
+	// 	cubeSelectionButtons [1].onClick.AddListener (() => MakeBlock (CubeType.Town));
+	// 	cubeSelectionButtons [2].onClick.AddListener (() => MakeBlock (CubeType.Road));
+	// 	cubeSelectionButtons [3].onClick.AddListener (() => MakeBlock (CubeType.Forest));
+	// 	cubeSelectionButtons [4].onClick.AddListener (CloseBlocks);
 
-		Debug.Log ("openeing menu");
-	}
+	// 	Debug.Log ("openeing menu");
+	// }
 
-	private void CloseBlocks ()
-	{
-		closeMenu.Invoke ();
-		cubeCreationMenu.gameObject.SetActive (false);
-		cubeSelectionButtons [0].onClick.RemoveAllListeners ();
-		cubeSelectionButtons [1].onClick.RemoveAllListeners ();
-		cubeSelectionButtons [2].onClick.RemoveAllListeners ();
-		cubeSelectionButtons [3].onClick.RemoveAllListeners ();
-		cubeSelectionButtons [4].onClick.RemoveAllListeners ();
+	// private void CloseBlocks ()
+	// {
+	// 	menu.gameObject.SetActive (false);
+	// 	cubeSelectionButtons [0].onClick.RemoveAllListeners ();
+	// 	cubeSelectionButtons [1].onClick.RemoveAllListeners ();
+	// 	cubeSelectionButtons [2].onClick.RemoveAllListeners ();
+	// 	cubeSelectionButtons [3].onClick.RemoveAllListeners ();
+	// 	cubeSelectionButtons [4].onClick.RemoveAllListeners ();
 
-		Debug.Log ("closing menu");
-	}
+	// 	Debug.Log ("closing menu");
+	// }
 
 	private void MakeBlock (CubeType type)
 	{
@@ -93,7 +89,7 @@ public class InitializeCube : MonoBehaviour
 
 		this.type = type;
 
-		CloseBlocks ();
+		menu.RemoveListeners();
 	}
 
 	public void InitMap ()
@@ -124,8 +120,8 @@ public class InitializeCube : MonoBehaviour
 		{
 			CreateTower tower = gameObject.AddComponent<CreateTower> ();
 			CreateMap map = GameObject.FindObjectOfType<CreateMap> ();
-			tower.Towers = map.towers;
-			tower.towerCreationMenu = map.menu;
+			tower.towers = map.towers;
+			tower.menu = menu;
 			tower.towerSelectionButtons = map.towerbuttons;
 			tower.openMenu = new UnityEvent ();
 			tower.closeMenu = new UnityEvent ();

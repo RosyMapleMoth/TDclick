@@ -7,8 +7,7 @@ public class MouseController : MonoBehaviour
 {
 
 	private GameState gameState;
-	private bool buildMenu = false;
-	private bool leavingmenu = false;
+	private bool leavingmenu;
 
 	delegate void UpdateFunction ();
 
@@ -17,10 +16,10 @@ public class MouseController : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		leavingmenu = false;
 		//Setup gameState link
 		gameState = GameObject.FindGameObjectWithTag ("GameState").GetComponent<GameState> ();
-		//Listen for initialization call
-		gameState.boardMade.AddListener (InitializeButtonsStart);
+
 		//Set the current update function.
 		updateFunction = TowerDefenseUpdate;
 	}
@@ -49,14 +48,8 @@ public class MouseController : MonoBehaviour
 		if (Physics.Raycast (ray, out hitObject)) {
 			gameState.objectHovered = hitObject.collider.gameObject;
 
-			//if we just exited the build menu, throw out any mouse input.
-			if (leavingmenu) {
-				Debug.Log ("leaving menu");
-				buildMenu = false;
-				leavingmenu = false;
-			} 
-			//Otherwise, if the mouse was released, register a click.
-			else if (Input.GetMouseButtonUp (0) && !buildMenu) {
+			//If the mouse was released, register a click.
+			if (Input.GetMouseButtonUp (0)) {
 				//Hand clicked object to gamestate.objectClicked
 				gameState.objectClicked = hitObject.collider.gameObject;
 				
@@ -121,7 +114,11 @@ public class MouseController : MonoBehaviour
     //Used for eating one frame of inputs
 	private void NoUpdate ()
 	{
-		updateFunction = TowerDefenseUpdate;
+		if (leavingmenu)
+		{
+			updateFunction = TowerDefenseUpdate;
+			leavingmenu = false;
+		}
 	}
 
 
@@ -133,44 +130,6 @@ public class MouseController : MonoBehaviour
 		}
 	}
 
-    /// <summary>
-    /// This function runs when the boardMade unity event is invoked for the first time by CreateMap,
-    /// after the initialization blocks have been created as the game first starts. 
-    /// </summary>
-	private void InitializeButtonsStart ()
-	{
-        //gets an array of the blocks in the game
-		GameObject[] blocks = GameObject.FindGameObjectsWithTag ("Initialize Cube");
-        
-        //for each block, add listeners to the close and openMenu unity events.
-		foreach (GameObject thisBlock in blocks) {
-			thisBlock.GetComponent<InitializeCube> ().closeMenu.AddListener (closeMenu);
-
-			thisBlock.GetComponent<InitializeCube> ().openMenu.AddListener (openMenu);
-		}
-
-        //removes this function from the listeners of boardMade, and adds its sister function in its place, InitializeButtons()
-		gameState.boardMade.RemoveListener (InitializeButtonsStart);
-		gameState.boardMade.AddListener (InitializeButtons);
-	}
-
-
-    /// <summary>
-    /// This function runs once the board has been set up, with a legal path from a forest to a town,
-    /// and the player presses the initialize board button.
-    /// </summary>
-	private void InitializeButtons ()
-	{
-        //get all towerBase blocks
-		GameObject[] blocks = GameObject.FindGameObjectsWithTag ("TowerBase");
-
-        //And add listeners to their unity events.
-		foreach (GameObject thisBlock in blocks) {
-			thisBlock.GetComponent<CreateTower> ().closeMenu.AddListener (closeMenu);
-
-			thisBlock.GetComponent<CreateTower> ().openMenu.AddListener (openMenu);
-		}
-	}
 
     /// <summary>
     /// Q : what does this do and how does it work?
@@ -181,13 +140,13 @@ public class MouseController : MonoBehaviour
     /// </summary>
 	public void openMenu ()
 	{
-		buildMenu = true;
+		updateFunction = NoUpdate;
+		leavingmenu = false;
 	}
 
 	public void closeMenu ()
 	{
 		leavingmenu = true;
-		updateFunction = NoUpdate;
 	}
 
 }

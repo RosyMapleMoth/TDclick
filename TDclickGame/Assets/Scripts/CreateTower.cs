@@ -8,12 +8,12 @@ public class CreateTower : MonoBehaviour
 {
 	public UnityEvent openMenu;
 	public UnityEvent closeMenu;
-    public Canvas towerCreationMenu;
+    public Menu menu;
     private GameState gameState;
     public GameObject heldTower;
     private bool instantiated;
     public Button[] towerSelectionButtons;
-    public GameObject[] Towers;
+    public GameObject[] towers;
 
 	public class intEvent : UnityEvent<int>
 	{}
@@ -37,7 +37,7 @@ public class CreateTower : MonoBehaviour
         {
             if (!instantiated)
             {
-                OpenMenu();
+                menu.AddTowerListeners(MakeTower, towers);
             }
         }
 	}
@@ -64,34 +64,34 @@ public class CreateTower : MonoBehaviour
             gameState.GetComponent<GameState>().validClick.RemoveListener(ClickedOn);
             instantiated = true;
 
-			CloseMenu ();
+			menu.RemoveListeners ();
         }
     }
 
-	public void OpenMenu()
-	{
-		openMenu.Invoke ();
-		towerCreationMenu.gameObject.SetActive(true);
-        towerSelectionButtons[0].onClick.AddListener(() => MakeTower(Towers[0]));
-        towerSelectionButtons[1].onClick.AddListener(() => MakeTower(Towers[1]));
-        towerSelectionButtons[2].onClick.AddListener(() => MakeTower(Towers[2]));
-        towerSelectionButtons[3].onClick.AddListener(() => MakeTower(Towers[3]));
-        towerSelectionButtons[4].onClick.AddListener(CloseMenu);
+	// public void OpenMenu()
+	// {
+	// 	openMenu.Invoke ();
+	// 	menu.gameObject.SetActive(true);
+    //     towerSelectionButtons[0].onClick.AddListener(() => MakeTower(towers[0]));
+    //     towerSelectionButtons[1].onClick.AddListener(() => MakeTower(towers[1]));
+    //     towerSelectionButtons[2].onClick.AddListener(() => MakeTower(towers[2]));
+    //     towerSelectionButtons[3].onClick.AddListener(() => MakeTower(towers[3]));
+    //     towerSelectionButtons[4].onClick.AddListener(CloseMenu);
 
-        Debug.Log("openeing menu");
+    //     Debug.Log("openeing menu");
 
-	}
+	// }
 
-	public void CloseMenu()
-	{
-		closeMenu.Invoke ();
-		towerCreationMenu.gameObject.SetActive(false);
-		towerSelectionButtons [0].onClick.RemoveAllListeners();
-		towerSelectionButtons [1].onClick.RemoveAllListeners();
-        towerSelectionButtons [2].onClick.RemoveAllListeners();
-        towerSelectionButtons [3].onClick.RemoveAllListeners();
-        towerSelectionButtons [4].onClick.RemoveAllListeners();
-        Debug.Log("closing menu");
-	}
+	// public void CloseMenu()
+	// {
+	// 	closeMenu.Invoke ();
+	// 	menu.gameObject.SetActive(false);
+	// 	towerSelectionButtons [0].onClick.RemoveAllListeners();
+	// 	towerSelectionButtons [1].onClick.RemoveAllListeners();
+    //     towerSelectionButtons [2].onClick.RemoveAllListeners();
+    //     towerSelectionButtons [3].onClick.RemoveAllListeners();
+    //     towerSelectionButtons [4].onClick.RemoveAllListeners();
+    //     Debug.Log("closing menu");
+	// }
 
 }

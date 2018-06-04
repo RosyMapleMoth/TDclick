@@ -11,8 +11,9 @@ public class CreateMap : MonoBehaviour
 	private const int MAPSIZE = 5;
 	public GameState gameState;
 	public Button[] towerbuttons;
-	public Canvas menu;
+	public Menu menu;
 	public GameObject[] towers;
+	public GameObject[] blocks;
 
 	private GameObject[,] map;
 
@@ -20,13 +21,13 @@ public class CreateMap : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		//menu = GameObject.FindObjectOfType<Menu>();
+
         setupBlockButtons();
 
 		gameState.startButton.onClick.AddListener (MapCreated);
 
 		CreateMapSkel ();
-
-		gameState.boardMade.Invoke ();
 	}
 	
 	// Update is called once per frame
@@ -44,7 +45,7 @@ public class CreateMap : MonoBehaviour
 			for (int r = 0; r < MAPSIZE; r++) {
 				temp = Instantiate (initTile, new Vector3 (c, 0f, r), Quaternion.identity, transform);
 				temp.GetComponent<InitializeCube> ().cubeSelectionButtons = towerbuttons;
-				temp.GetComponent<InitializeCube> ().cubeCreationMenu = menu;
+				temp.GetComponent<InitializeCube> ().menu = menu;
 
 				map [c, r] = temp;
 			}
@@ -54,13 +55,14 @@ public class CreateMap : MonoBehaviour
 	private void MapCreated ()
 	{
 		if (InitializeCube.TryForRoad (this)) {
-			setupMenu (5);
+			menu.BuildMenu(towers);
+			// setupMenu (5);
 
-			towerbuttons [0].gameObject.GetComponentInChildren<Text> ().text = "Bonfire Tower";
-			towerbuttons [1].gameObject.GetComponentInChildren<Text> ().text = "Arrow Tower";
-			towerbuttons [2].gameObject.GetComponentInChildren<Text> ().text = "Bomb Tower";
-            towerbuttons [3].gameObject.GetComponentInChildren<Text> ().text = "Slow Tower";
-            towerbuttons [4].gameObject.GetComponentInChildren<Text> ().text = "Exit Menu";
+			// towerbuttons [0].gameObject.GetComponentInChildren<Text> ().text = "Bonfire Tower";
+			// towerbuttons [1].gameObject.GetComponentInChildren<Text> ().text = "Arrow Tower";
+			// towerbuttons [2].gameObject.GetComponentInChildren<Text> ().text = "Bomb Tower";
+            // towerbuttons [3].gameObject.GetComponentInChildren<Text> ().text = "Slow Tower";
+            // towerbuttons [4].gameObject.GetComponentInChildren<Text> ().text = "Exit Menu";
 
             GameObject[] blocks = GameObject.FindGameObjectsWithTag ("Initialize Cube");
 
@@ -77,41 +79,41 @@ public class CreateMap : MonoBehaviour
 
             gameState.startButton.onClick.RemoveListener(MapCreated);
 
-            gameState.boardMade.Invoke ();
 			gameState.MapDone ();
 		} else {
 			Debug.Log ("Invalid Road");
 		}
 	}
 
-	private void setupMenu (int numButtons)
-	{
-		if (!menu.gameObject.activeSelf) {
-			menu.gameObject.SetActive (true);
-		}
-		// clear all buttons
-		foreach (Button button in towerbuttons) {
-			GameObject.Destroy (button.gameObject);
-		}
-		towerbuttons = new Button[numButtons];
-		for (int i = 0; i < numButtons; i++) {
-			GameObject tempButton = Instantiate (buttonTemplate);
-			tempButton.transform.SetParent (menu.transform.GetChild (0).GetChild (0).GetChild (0));
-			towerbuttons [i] = tempButton.GetComponent<Button> ();
-		}
+	// private void setupMenu (int numButtons)
+	// {
+	// 	if (!menu.gameObject.activeSelf) {
+	// 		menu.gameObject.SetActive (true);
+	// 	}
+	// 	// clear all buttons
+	// 	foreach (Button button in towerbuttons) {
+	// 		GameObject.Destroy (button.gameObject);
+	// 	}
+	// 	towerbuttons = new Button[numButtons];
+	// 	for (int i = 0; i < numButtons; i++) {
+	// 		GameObject tempButton = Instantiate (buttonTemplate);
+	// 		tempButton.transform.SetParent (menu.transform.GetChild (0).GetChild (0).GetChild (0));
+	// 		towerbuttons [i] = tempButton.GetComponent<Button> ();
+	// 	}
 
-		menu.gameObject.SetActive (false);
-	}
+	// 	menu.gameObject.SetActive (false);
+	// }
 
     private void setupBlockButtons()
     {
-        setupMenu(5);
+		menu.BuildMenu(blocks);
+        // setupMenu(5);
 
-        towerbuttons[0].gameObject.GetComponentInChildren<Text>().text = "Tower Block";
-        towerbuttons[1].gameObject.GetComponentInChildren<Text>().text = "Town Block";
-        towerbuttons[2].gameObject.GetComponentInChildren<Text>().text = "Road Block";
-        towerbuttons[3].gameObject.GetComponentInChildren<Text>().text = "Forest Block";
-        towerbuttons[4].gameObject.GetComponentInChildren<Text>().text = "Exit Menu";
+        // towerbuttons[0].gameObject.GetComponentInChildren<Text>().text = "Tower Block";
+        // towerbuttons[1].gameObject.GetComponentInChildren<Text>().text = "Town Block";
+        // towerbuttons[2].gameObject.GetComponentInChildren<Text>().text = "Road Block";
+        // towerbuttons[3].gameObject.GetComponentInChildren<Text>().text = "Forest Block";
+        // towerbuttons[4].gameObject.GetComponentInChildren<Text>().text = "Exit Menu";
     }
 
 	public bool GetTile (int column, int row, out GameObject tile)

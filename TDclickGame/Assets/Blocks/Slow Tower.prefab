@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 23708233683775554}
   - component: {fileID: 114895252993152794}
   m_Layer: 0
-  m_Name: Slow
+  m_Name: Slow Tower
   m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
