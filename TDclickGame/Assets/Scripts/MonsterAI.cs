@@ -84,16 +84,18 @@ public class MonsterAI : MonoBehaviour
 			damageTimer -= Time.deltaTime;
 
 			if (damageTimer < 0) {
-                //if the damage timer is now below zero, set the material to fully black and the timer to 0
+                //if the damage timer is now below zero, reset the material to fully black and the timer to 0
 				gameObject.GetComponentInChildren<MeshRenderer> ().material.color = Color.black;
 				damageTimer = 0;
 			}
 		} else if (damageTimer > 0 && !alive) {
-			gameObject.GetComponentInChildren<MeshRenderer> ().material.color = Color.Lerp (Color.clear, Color.red, damageTimer);
+            //if the damage timer is still decreasing but enemy is dead, lerp between red and clear instead //NOT WORKING //TODO
+            gameObject.GetComponentInChildren<MeshRenderer> ().material.color = Color.Lerp (Color.clear, Color.red, damageTimer);
 
 			damageTimer -= Time.deltaTime;
 
 			if (damageTimer < 0) {
+                //if damage timer now below zero, set the color to fully clear and then destroy the gameobject
 				gameObject.GetComponentInChildren<MeshRenderer> ().material.color = Color.clear;
 				damageTimer = 0;
 				GameObject.Destroy (gameObject);
@@ -101,14 +103,24 @@ public class MonsterAI : MonoBehaviour
 		}     
 	}
 
+    /// <summary>
+    /// Change Health adds 'Health Change' to the current health,
+    /// activates the damage timer if it subtracted health,
+    /// and does initial death preparation if the enemy dies.
+    /// </summary>
+    /// <param name="Health Change"></param>
 	public void ChangeHealth (int change)
 	{
 		if (Health > 0) {
+            //if enemy not dead yet, change their health by the entered amount
 			Health += change;
 			if (change < 0) {
+                //if health is being negatively changed, activate the damage timer
 				damageTimer = 1;
 
 				if (Health < 1) {
+                    //if enemy is now dead, increase the player's gold and score, invoke Dealth, and set the bool alive to false
+                    //in preparation for the removal of the enemy from the game.
 					gameState.ChangeGold (gameState.GetWave ());
 					gameState.IncreaseScore (gameState.GetWave ());
 					Death.Invoke (this.gameObject);
@@ -116,6 +128,7 @@ public class MonsterAI : MonoBehaviour
 				}
 			}
 		} else {
+            //TODO: this shouldnt happen but it does. Need to figure out why and then fix it.
 			Debug.Log ("Damaged dead Enemy");
 			Death.Invoke (this.gameObject);
 			alive = false;
@@ -132,11 +145,19 @@ public class MonsterAI : MonoBehaviour
 		return distance;
 	}
 
+    /// <summary>
+    /// MultiplySpeed takes a float and multiplies the current speed by that value
+    /// </summary>
+    /// <param name="Speed Multiplier"></param>
     public void MultiplySpeed(float newSpeed)
     {
         speed = newSpeed * speed;
     }
 
+    /// <summary>
+    /// Reset speed to original value.
+    /// TODO: have original value stored so that there can be different base speeds.
+    /// </summary>
     public void ResetSpeed()
     {
         speed = 1f;

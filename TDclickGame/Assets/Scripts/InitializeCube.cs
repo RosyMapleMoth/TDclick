@@ -51,6 +51,12 @@ public class InitializeCube : MonoBehaviour
 
 	}
 
+    /// <summary>
+    /// ClickedOn is called when the mouse is clicked.
+    /// First, it checks if the object clicked was it's
+    /// gameobject, and then if it was it calls
+    /// menu's AddBlockListeners function.
+    /// </summary>
 	private void ClickedOn ()
 	{
 		if (gameState.objectClicked == gameObject) {
@@ -83,6 +89,11 @@ public class InitializeCube : MonoBehaviour
 	// 	Debug.Log ("closing menu");
 	// }
 
+    /// <summary>
+    /// Sets the block's mesh to the appropriate color,
+    /// the type to the appropriate type, and then removes menu's listeners
+    /// </summary>
+    /// <param name="Block Type"></param>
 	private void MakeBlock (CubeType type)
 	{
 		this.gameObject.GetComponent<MeshRenderer> ().material = materials [(int)type];
@@ -91,6 +102,10 @@ public class InitializeCube : MonoBehaviour
 
 		menu.RemoveListeners();
 	}
+
+    //TODO
+    // All of this shit is a complete mess and we should try to fix it together some time
+    // because i get tired just looking at it.
 
 	public void InitMap ()
 	{

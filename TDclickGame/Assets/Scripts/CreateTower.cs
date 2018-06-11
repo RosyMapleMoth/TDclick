@@ -31,6 +31,12 @@ public class CreateTower : MonoBehaviour
 		
 	}
 
+    /// <summary>
+    /// ClickedOn is called when the mouse is clicked.
+    /// First, it checks if the object clicked was it's
+    /// gameobject, and then if it was it calls
+    /// menu's AddTowerListeners function.
+    /// </summary>
     private void ClickedOn()
     {
         if (gameState.objectClicked == gameObject)
@@ -42,6 +48,12 @@ public class CreateTower : MonoBehaviour
         }
 	}
 
+    /// <summary>
+    /// If a tower has been created on this tower block,
+    /// returns true and that tower, otherwise returns false and null
+    /// </summary>
+    /// <param name="tower"></param>
+    /// <returns></returns>
     public bool GetTower( out GameObject tower)
     {
         if (instantiated)
@@ -54,6 +66,14 @@ public class CreateTower : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// If there is enough gold to build the tower, creates the tower
+    /// and removes the gold to pay for the tower.
+    /// Then removes this funcction from the listeners
+    /// on validClick, marks itself as instantiated and
+    /// tells menu to remove the listeners.
+    /// </summary>
+    /// <param name="Tower To Instantiate"></param>
 	public void MakeTower(GameObject towertoInst)
     {
 		if (gameState.GetGold() >= towertoInst.GetComponent<Tower>().GetBaseCost())

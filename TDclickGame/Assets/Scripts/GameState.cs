@@ -30,6 +30,9 @@ public class GameState : MonoBehaviour
 	
 	
 	private bool boardInitialized;
+    /// <summary>
+    /// Is false while enemies are being spawned in, set to true once wave has been fully spawned
+    /// </summary>
 	private bool finishedWave;
 
 	private bool waveFailed;
@@ -66,6 +69,11 @@ public class GameState : MonoBehaviour
 		}
 	}
 
+    /// <summary>
+    /// Auxillary function of Update.
+    /// Checks to see if there are currently any enemies on screen,
+    /// and if not calls IncrementWave.
+    /// </summary>
 	private void CheckWave ()
 	{
 		if (activeEnemies.Count == 0) {
@@ -73,6 +81,9 @@ public class GameState : MonoBehaviour
 		}
 	}
 
+    /// <summary>
+    /// Auxillary function of Update, maintains all the text strings.
+    /// </summary>
 	private void UpdateText ()
 	{
 		goldCount.text = "Gold: " + gold.getIntAmount().ToString ();
@@ -93,42 +104,62 @@ public class GameState : MonoBehaviour
 		if (objectHovered != null) {
 			if (objectHovered.CompareTag ("Enemy")) {
 				mouseStats.text = "Enemy Health: " + objectHovered.GetComponentInParent<MonsterAI> ().Health + " / " + wave * 3;
-			} else if (objectHovered.CompareTag ("Tower")) {
+			}
+
+            else if (objectHovered.CompareTag ("Tower")) {
 				Tower tower = objectHovered.GetComponent<Tower> ();
 				float dps = (float)tower.GetDamage () / tower.GetRate ();
-				mouseStats.text = "Damage: " + tower.GetDamage () +
+
+                mouseStats.text = "Damage: " + tower.GetDamage () +
 				".\nFire Rate: " + tower.GetRate ().ToString () +
 				".\nDPS: " + dps.ToString () +
 				".\n\nNext Upgrade: " + tower.GetUpgradeCost () + " gold.";
-			} else if (objectHovered.CompareTag ("Start")) {
+			}
+
+            else if (objectHovered.CompareTag ("Start")) {
 				mouseStats.text = "Monster Forest.";
-			} else if (objectHovered.CompareTag ("End")) {
+			}
+
+            else if (objectHovered.CompareTag ("End")) {
 				mouseStats.text = "The City.";
-			} else if (objectHovered.CompareTag ("Road")) {
+			}
+
+            else if (objectHovered.CompareTag ("Road")) {
 				mouseStats.text = "The Road.";
-			} else if (objectHovered.CompareTag ("TowerBase")) {
+			}
+
+            else if (objectHovered.CompareTag ("TowerBase")) {
 				GameObject towerObject;
-				if (objectHovered.GetComponent<CreateTower> ().GetTower (out towerObject)) {
+
+                if (objectHovered.GetComponent<CreateTower> ().GetTower (out towerObject)) {
 					Tower tower = towerObject.GetComponent<Tower> ();
 					float dps = (float)tower.GetDamage () / tower.GetRate ();
-					mouseStats.text = "Damage: " + tower.GetDamage () +
+
+                    mouseStats.text = "Damage: " + tower.GetDamage () +
 					".\nFire Rate: " + tower.GetRate ().ToString () +
 					".\nDPS: " + dps.ToString () +
 					".\n\nNext Upgrade: " + tower.GetUpgradeCost () + " gold.";
-				} else {
+				}
+
+                else {
 					mouseStats.text = "Open Field.";
 				}
-			} else {
+			}
+
+            else {
 				mouseStats.text = "";
 			}
-		} else {
+		}
+
+        else {
 			mouseStats.text = "";
 		}
 	}
 
+
 	public void ChangeGold (int change)
 	{
-		gold.addAmmount(change);
+		gold.addAmount(change);
 	}
 
 	public int GetGold ()
@@ -151,6 +182,11 @@ public class GameState : MonoBehaviour
 		finishedWave = true;
 	}
 
+    /// <summary>
+    /// Starts the next wave once there are no more enemies on the screen.
+    /// If the last wave wasn't failed, increases the wave counter,
+    /// otherwise resets the current wave and begins again.
+    /// </summary>
 	public void IncrementWave ()
 	{
 		if (!waveFailed)
@@ -188,6 +224,10 @@ public class GameState : MonoBehaviour
 		activeEnemies.Remove (enemy);
 	}
 
+    /// <summary>
+    /// When the Start Game button is pressed, this makes the waves start
+    /// by calling IncrementWave for the first time, and deactivates the button.
+    /// </summary>
 	private void StartGame ()
 	{
 		if (wave == 0) {
@@ -197,6 +237,12 @@ public class GameState : MonoBehaviour
 		}
 	}
 
+    /// <summary>
+    /// When the Initiallize Map button is pressed, this function
+    /// adds StartGame() to its listeners, and changes
+    /// the button's text to 'start', while logging
+    /// the fact that the board has been initialized.
+    /// </summary>
 	public void MapDone ()
 	{
 		startButton.onClick.AddListener (StartGame);

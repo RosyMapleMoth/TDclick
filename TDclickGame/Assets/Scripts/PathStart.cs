@@ -28,6 +28,12 @@ public class PathStart : MonoBehaviour
 		updateFunction ();
 	}
 
+    /// <summary>
+    /// SpawnEnemy instantiates the enemy, sets up the Death event
+    /// because that wouldnt otherwise be set up until after this function runs,
+    /// sets the enemies startPath to this gameobject, and adds it to
+    /// gameState's list of enemies using AddEnemy.
+    /// </summary>
 	private void SpawnEnemy ()
 	{
 		GameObject enemy = Instantiate (Enemy, this.transform.position, Quaternion.identity);
@@ -36,6 +42,16 @@ public class PathStart : MonoBehaviour
 		gameState.AddEnemy (enemy);
 	}
 
+    /// <summary>
+    /// This function is the standard update function.
+    /// It first increases counter by the time elapsed
+    /// since the last frame, then checks if enough time
+    /// has elapsed to spawn a new enemy. If an enemy is
+    /// spawned, increases the count which tracks the number
+    /// of enemies spawned. Once 10 enemies have been spawned,
+    /// resets the ccount, sets the update function to the
+    /// blank WaveBreakUpdate, and invokes gamestate.waveOver.
+    /// </summary>
 	private void NormalUpdate ()
 	{
 		counter += Time.deltaTime;
@@ -49,7 +65,7 @@ public class PathStart : MonoBehaviour
 		if (/*count % 10 == 0*/ count > 9) {
 			count = 0;
 			updateFunction = WaveBreakUpdate;
-			gameState.newWave.AddListener (NewWave);
+			//gameState.newWave.AddListener (NewWave);
 			gameState.waveOver.Invoke ();
 		}
 
@@ -69,7 +85,8 @@ public class PathStart : MonoBehaviour
 	private void GameStart ()
 	{
 		updateFunction = NormalUpdate;
-		gameState.newWave.RemoveListener (GameStart);
+        gameState.newWave.AddListener(NewWave);
+        gameState.newWave.RemoveListener (GameStart);
 	}
 
 	private void BlankUpdate ()

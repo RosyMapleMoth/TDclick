@@ -32,7 +32,7 @@ public class Gold
     }
     
     // adds the int passed in to the;
-    public void addAmmount(int toAdd)
+    public void addAmount(int toAdd)
     {
         if (toAdd + gold >= 0)
         {
@@ -41,7 +41,7 @@ public class Gold
     }
 
     // adds the Gold ammount passed in;
-    public void addAmmount(Gold toAdd)
+    public void addAmount(Gold toAdd)
     {
         if (toAdd.getIntAmount() + gold >= 0)
         {
