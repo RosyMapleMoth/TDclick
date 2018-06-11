@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 23445903354609490}
   - component: {fileID: 114155662996932858}
   m_Layer: 0
-  m_Name: BombTower
+  m_Name: Bomb Tower
   m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,6 +56,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:

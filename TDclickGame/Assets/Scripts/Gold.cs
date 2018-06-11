@@ -34,13 +34,19 @@ public class Gold
     // adds the int passed in to the;
     public void addAmmount(int toAdd)
     {
-        gold += toAdd;
+        if (toAdd + gold >= 0)
+        {
+            gold += toAdd;
+        }
     }
 
     // adds the Gold ammount passed in;
     public void addAmmount(Gold toAdd)
     {
+        if (toAdd.getIntAmount() + gold >= 0)
+        {
         gold += toAdd.getIntAmount();
+        }
     }
     
     /*
