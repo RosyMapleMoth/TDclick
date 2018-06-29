@@ -71,6 +71,8 @@ instances of this class. */
 			Text buttonText = button.GetComponentInChildren<Text>();
 
 			buttonText.text = building.Name + " Build Cost: " + CurrentBuildingCost().ToString();
+
+            Buildings.Add(building);
         }
 	}
 
@@ -92,7 +94,9 @@ instances of this class. */
 	{
 		if (gameState.GetGold() >= CurrentBuildingCost())
 		{
-			gameState.ChangeGold( -1 * CurrentBuildingCost());
+            Buildings.Remove(building);
+
+            gameState.ChangeGold( -1 * CurrentBuildingCost());
 
 			building.level += 1;
 
@@ -111,6 +115,14 @@ instances of this class. */
 			Text buttonText = building.button.GetComponentInChildren<Text>();
 
 			buttonText.text = building.Name + " Upgrade Cost: " + BuildingUpgradeCost(building).ToString() + ", current earnings: " + building.goldPerSec.ToString();
+
+            foreach(BuildingType buildingInc in Buildings)
+            {
+                if (!buildingInc.built)
+                {
+                    buildingInc.button.GetComponentInChildren<Text>().text = buildingInc.Name + " Build Cost: " + CurrentBuildingCost().ToString();
+                }
+            }
 
             Buildings.Add(building);
         }
@@ -151,15 +163,23 @@ instances of this class. */
 	{
 		if (gameState.GetGold() >= BuildingUpgradeCost(building))
 		{
+            Debug.Log(Buildings.Remove(building).ToString());
+
 			gameState.ChangeGold( -1 * BuildingUpgradeCost(building));
 
 			building.level += 1;
 
-			building.goldPerSec = (building.baseValue / 20) * building.level;
+			building.goldPerSec += (building.baseValue / 20);
 
-			Text buttonText = building.button.GetComponentInChildren<Text>();
+            building.button.GetComponent<Button>().onClick.RemoveAllListeners();
+
+            building.button.GetComponent<Button>().onClick.AddListener(() => LevelBuilding(building));
+
+            Text buttonText = building.button.GetComponentInChildren<Text>();
 
 			buttonText.text = building.Name + " Upgrade Cost: " + BuildingUpgradeCost(building).ToString() + ", current earnings: " + building.goldPerSec.ToString();
+
+            Buildings.Add(building);
 		}
 
 	}
