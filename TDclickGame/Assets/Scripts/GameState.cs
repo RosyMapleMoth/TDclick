@@ -27,6 +27,8 @@ public class GameState : MonoBehaviour
 	public UnityEvent validClick;
 	public UnityEvent newWave;
 	public UnityEvent waveOver;
+
+	public int startingGold;
 	
 	
 	private bool boardInitialized;
@@ -42,7 +44,7 @@ public class GameState : MonoBehaviour
 	{
         gold = new Gold();
 
-        gold.setAmount(0);
+        gold.setAmount(startingGold);
 		//validClick = new UnityEvent(); //This isnt needed because apparently UnityEvents are automatically created.
 		//This was activating AFTER the bonfire and BEFORE the arrow tower, so only the arrow tower was listening.
 		score = 0;
