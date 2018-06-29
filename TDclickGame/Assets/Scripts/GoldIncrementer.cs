@@ -10,7 +10,7 @@ we could just have this class handle everythng, or
 we could have this class be a single farm, and have multiple live
 instances of this class. */
 
-	public struct buildingType
+	public struct BuildingType
 	{
 		public string Name;
 		public int baseValue;
@@ -32,7 +32,7 @@ instances of this class. */
 
 	//public textf
 
-	List<buildingType> Buildings = new List<buildingType>();
+	List<BuildingType> Buildings = new List<BuildingType>();
 	 
 	string [] names;
 
@@ -56,9 +56,7 @@ instances of this class. */
 
 		foreach (string name in names)
 		{
-			buildingType building = CreateBuildingType(name);
-
-			Buildings.Add(building);
+			BuildingType building = CreateBuildingType(name);
 
 			GameObject button = GameObject.Instantiate(buttonPrefab);
 
@@ -73,22 +71,24 @@ instances of this class. */
 			Text buttonText = button.GetComponentInChildren<Text>();
 
 			buttonText.text = building.Name + " Build Cost: " + CurrentBuildingCost().ToString();
-		}
+        }
 	}
 
-	private buildingType CreateBuildingType(string name)
+	private BuildingType CreateBuildingType(string name)
 	{
-		buildingType building = new buildingType();
-		building.Name = name;
-		building.baseValue = 0;
-		building.level = 0;
-		building.goldPerSec = 0;
-		building.built = false;
+        BuildingType building = new BuildingType
+        {
+            Name = name,
+            baseValue = 0,
+            level = 0,
+            goldPerSec = 0,
+            built = false
+        };
 
-		return building; 
+        return building; 
 	}
 
-	private void BuildBuilding(buildingType building)
+	private void BuildBuilding(BuildingType building)
 	{
 		if (gameState.GetGold() >= CurrentBuildingCost())
 		{
@@ -111,7 +111,9 @@ instances of this class. */
 			Text buttonText = building.button.GetComponentInChildren<Text>();
 
 			buttonText.text = building.Name + " Upgrade Cost: " + BuildingUpgradeCost(building).ToString() + ", current earnings: " + building.goldPerSec.ToString();
-		}
+
+            Buildings.Add(building);
+        }
 	}
 
 	private int CurrentBuildingCost()
@@ -130,7 +132,7 @@ instances of this class. */
 
 		if (timer > 1f)
 		{
-			foreach(buildingType building in Buildings)
+			foreach(BuildingType building in Buildings)
 			{
 				if (building.goldPerSec > 0)
 				{
@@ -145,7 +147,7 @@ instances of this class. */
 		}
 	}
 
-	private void LevelBuilding(buildingType building)
+	private void LevelBuilding(BuildingType building)
 	{
 		if (gameState.GetGold() >= BuildingUpgradeCost(building))
 		{
@@ -162,11 +164,11 @@ instances of this class. */
 
 	}
 
-	private int BuildingUpgradeCost(buildingType building)
+	private int BuildingUpgradeCost(BuildingType building)
 	{
 		int cost;
 
-		cost = building.baseValue * (int)(Mathf.Pow(1.05f, building.level));
+		cost = (int)(building.baseValue * (Mathf.Pow(1.05f, building.level)));
 
 		return cost;
 	}
