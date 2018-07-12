@@ -25,7 +25,7 @@ abstract public class Tower : MonoBehaviour
 
 		RangeObject = Instantiate (this.RangeObject);
 		RangeObject.transform.parent = this.transform;
-		RangeObject.transform.SetPositionAndRotation (new Vector3 (0, -.1f, 0) + gameObject.transform.position, Quaternion.identity);
+		RangeObject.transform.SetPositionAndRotation (new Vector3 (0, -2.4f, 0) + gameObject.transform.position, Quaternion.identity);
 
 		TowerRange towerRange = RangeObject.GetComponent<TowerRange> ();
 		towerRange.monsterEntered = new TowerRange.GameObjectEvent ();

@@ -58,7 +58,7 @@ public class CreateTower : MonoBehaviour
     {
 		if (gameState.GetGold() >= towertoInst.GetComponent<Tower>().GetBaseCost())
         {
-			heldTower = Instantiate(towertoInst, this.transform.position + Vector3.up, Quaternion.identity);
+			heldTower = Instantiate(towertoInst, this.transform.position + Vector3.up * 2, Quaternion.identity);
 			gameState.ChangeGold(towertoInst.GetComponent<Tower>().GetBaseCost()*(-1));
 
             gameState.GetComponent<GameState>().validClick.RemoveListener(ClickedOn);
