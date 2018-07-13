@@ -43,6 +43,8 @@ public class BombScript : MonoBehaviour {
             transform.position = Vector3.Lerp(start, end, timer);
             timer = timer + Time.deltaTime;
 
+           // transform.GetChild(0).up = 
+
             if (Mathf.Abs(Vector3.Distance(transform.position, end)) <= .2f)
             {
                 LightFuse();

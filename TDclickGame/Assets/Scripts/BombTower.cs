@@ -13,6 +13,7 @@ public class BombTower : Tower {
     private float bombRange;
     public GameObject bomBomb;
     private bool fireWhenReady;
+    private GameObject cannon;
 
 
     // Use this for initialization
