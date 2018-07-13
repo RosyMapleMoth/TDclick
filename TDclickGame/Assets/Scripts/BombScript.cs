@@ -60,7 +60,7 @@ public class BombScript : MonoBehaviour {
     {
         Explode();
 
-        gameObject.GetComponentInChildren<MeshRenderer>().material.color = Color.clear;
+        GameObject.Destroy(gameObject.transform.GetChild(0).gameObject);
 
         updateFunction = AftermathUpdate;
     }
