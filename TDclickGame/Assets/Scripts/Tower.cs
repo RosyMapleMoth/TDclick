@@ -107,7 +107,7 @@ abstract public class Tower : MonoBehaviour
 	private void SetRange ()
 	{
 		float range = GetRange ();
-		float towerRangeValue = range * 4 + 2;
+		float towerRangeValue = range * 2 + 1;
 		RangeObject.transform.localScale = new Vector3 (towerRangeValue, 1, towerRangeValue);
 	}
 

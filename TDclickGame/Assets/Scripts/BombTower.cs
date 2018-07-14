@@ -14,6 +14,7 @@ public class BombTower : Tower {
     public GameObject bomBomb;
     private bool fireWhenReady;
     private GameObject cannon;
+    private GameObject currentTarget;
 
 
     // Use this for initialization
@@ -27,6 +28,7 @@ public class BombTower : Tower {
         level = 1;
         gameState = GameObject.FindObjectOfType<GameState>();
         fireWhenReady = false;
+        cannon = transform.GetChild(0).GetChild(1).gameObject;
 
         base.Start();
 	}
@@ -35,6 +37,14 @@ public class BombTower : Tower {
     protected override void Update ()
     {
         base.Update();
+
+        FindTarget();
+
+        if (currentTarget != null)
+        {
+            cannon.transform.LookAt(currentTarget.transform);
+        }
+
         if (fireWhenReady)
         {
             if (DealActualDamage())
@@ -71,10 +81,9 @@ public class BombTower : Tower {
         fireWhenReady = true;
     }
 
-    private bool DealActualDamage()
+    private void FindTarget()
     {
         float leaderHealth = 0;
-        GameObject leader = null;
 
         foreach (var enemy in GetEnemies())
         {
@@ -83,19 +92,21 @@ public class BombTower : Tower {
                 MonsterAI enemyAI = enemy.GetComponentInParent<MonsterAI>();
                 if (enemyAI.isAlive() && enemyAI.Health > leaderHealth && Mathf.Abs(Vector3.Distance(transform.position, enemy.transform.position)) > rangeFloor)
                 {
-                    leader = enemy;
+                    currentTarget = enemy;
                     leaderHealth = enemyAI.Health;
                 }
             }
         }
+    }
 
-
+    private bool DealActualDamage()
+    {
         //launch bomb at enemy
-        if (leader != null)
+        if (currentTarget != null)
         {
             GameObject GO = Instantiate(bomBomb, transform.position, Quaternion.identity);
             BombScript BS = GO.GetComponent<BombScript>();
-            BS.target = leader;
+            BS.target = currentTarget;
             BS.explosionRange = bombRange;
             BS.damage = damage;
             return true;
